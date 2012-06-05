@@ -1,8 +1,8 @@
 <html>
 	<head>
-		<title>WordCamp NYC 2012: Wordpress on the Command Line - It's really not that scary!</title>
+		<title>WordCamp NYC 2012: Moving Beyond the Codex: Learning WordPress from Itself</title>
 
-		<link rel="stylesheet" href="master/style.css" />
+		<link rel="stylesheet" href="../master/style.css" />
 
 	</head>
 	<body class="impress-not-supported">
@@ -19,32 +19,33 @@
 			<p>Use a spacebar or arrow keys to navigate</p>
 	</div>
 	<script>
-	if ("ontouchstart" in document.documentElement) { 
+	if ("ontouchstart" in document.documentElement) {
 			document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
 	}
 	</script>
 
 	<div id="impress">
 		<div id="intro" class="step slide" data-x="0" data-y="0">
-			<h1>WordPress on the CLI</h1>
+			<h1>Moving Beyond the Codex</h1>
 
-			<h2>It's really not scary!</h2>
+			<h2>Learning WordPress from Itself</h2>
 
-			<p>By Ben Doherty @ Oomph, Inc.</p>
+			<p>By Erick Hitter (<a href="http://twitter.com/ethitter">@ethitter</a>) @ Oomph, Inc.</p>
 		</div>
 
 		<div class="step slide" data-x="1200" data-y="0">
-			<h1>It's fun! And powerful!</h1>
+			<h1>Who Am I?</h1>
 
-			<h2>CLI interfaces make you look cool and let you get work done faster.</h2>
+			<h2>(In other words, why should you care about anything I have to say)</h2>
 
-			<p>Lots of time is spent wrangling GUI interfaces in order to get work done
-			that is always done faster by typing. In fact, the time spent moving from keyboard
-			to pointing device is time lost!</p>
+			<p>WordPress developer at <a href="http://www.thinkoomph.com">Oomph, Inc.</a></p>
+			<p>WordPress 3.3 Core Contributor</p>
+			<p>WordCamp Boston Organizer</p>
+			<p>Plugin Author</p>
 		</div>
 
 		<div class="step slide" data-x="1200" data-y="900">
-			<h1>The *NIX CLI: Crash Course</h1>
+			<h1>Why Are We Here?</h1>
 
 			<dl>
 				<dt><span class="prompt">$</span></dt>
@@ -77,21 +78,21 @@
 	</div>
 
 	<!--
-			
+
 			Last, but not least.
-			
+
 			To make all described above really work, you need to include impress.js in the page.
 			I strongly encourage to minify it first.
-			
+
 			In here I just include full source of the script to make it more readable.
-			
+
 			You also need to call a `impress().init()` function to initialize impress.js presentation.
 			And you should do it in the end of your document. Not only because it's a good practice, but also
 			because it should be done when the whole document is ready.
 			Of course you can wrap it in any kind of "DOM ready" event, but I was too lazy to do so ;)
-			
+
 	-->
-	<script src="impress.js"></script>
+	<script src="../master/impress.js"></script>
 	<script>impress().init();</script>
 
 	</body>
