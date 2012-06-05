@@ -1,0 +1,99 @@
+<html>
+	<head>
+		<title>WordCamp NYC 2012: Wordpress on the Command Line - It's really not that scary!</title>
+
+		<link rel="stylesheet" href="wordpress-cli.css" />
+
+	</head>
+	<body class="impress-not-supported">
+
+	<!--
+			For example this fallback message is only visible when there is `impress-not-supported` class on body.
+	-->
+	<div class="fallback-message">
+			<p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+			<p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+	</div>
+
+	<div class="hint">
+			<p>Use a spacebar or arrow keys to navigate</p>
+	</div>
+	<script>
+	if ("ontouchstart" in document.documentElement) { 
+			document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
+	}
+	</script>
+
+	<div id="impress">
+		<div id="intro" class="step slide" data-x="0" data-y="0">
+			<h1>WordPress on the CLI</h1>
+
+			<h2>It's really not scary!</h2>
+
+			<p>By Ben Doherty @ Oomph, Inc.</p>
+		</div>
+
+		<div class="step slide" data-x="1200" data-y="0">
+			<h1>It's fun! And powerful!</h1>
+
+			<h2>CLI interfaces make you look cool and let you get work done faster.</h2>
+
+			<p>Lots of time is spent wrangling GUI interfaces in order to get work done
+			that is always done faster by typing. In fact, the time spent moving from keyboard
+			to pointing device is time lost!</p>
+		</div>
+
+		<div class="step slide" data-x="1200" data-y="900">
+			<h1>The *NIX CLI: Crash Course</h1>
+
+			<dl>
+				<dt><span class="prompt">$</span></dt>
+				<dd>Your command prompt. Your mileage may vary.</dd>
+
+				<dt><span class="prompt">$</span> pwd</dt>
+				<dd>Your <strong>current working directory</strong>, or <em>cwd</em></dd>
+
+				<dt><span class="prompt">$</span> ls</dt>
+				<dd>List files in your <em>cwd</em></dd>
+
+				<dt><span class="prompt">$</span> cd dir</dt>
+				<dd>Change <em>cwd</em> to <em>dir</em></dd>
+			</dl>
+		</div>
+
+		<div class="step slide" data-x="3000" data-y="20">
+			<h1>Now That's Out of the Way...</h1>
+		</div>
+
+		<div class="step slide" data-x="4000" data-y="20">
+			<h2><strong>wpsh</strong>: The Wordpress Shell.</h2>
+
+			<ul>
+				<li>Call WordPress API functions in an interactive environment</li>
+
+				<li>Based on PHPShell.</li>
+			</ul>
+
+	</div>
+
+	<!--
+			
+			Last, but not least.
+			
+			To make all described above really work, you need to include impress.js in the page.
+			I strongly encourage to minify it first.
+			
+			In here I just include full source of the script to make it more readable.
+			
+			You also need to call a `impress().init()` function to initialize impress.js presentation.
+			And you should do it in the end of your document. Not only because it's a good practice, but also
+			because it should be done when the whole document is ready.
+			Of course you can wrap it in any kind of "DOM ready" event, but I was too lazy to do so ;)
+			
+	-->
+	<script src="impress.js"></script>
+	<script>impress().init();</script>
+
+	</body>
+</html>
+
