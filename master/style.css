@@ -329,7 +329,44 @@ body {
 .impress-enabled          { pointer-events: none }
 .impress-enabled #impress { pointer-events: auto }
 
-#intro { background: #ef3125 url(oomph-boxed-180x252.jpeg) no-repeat center; }
-.slide { background: #ef3125; }
+h1, h2, h3 { font-family: "Helvetica Neueu", Helvetica, Arial, sans-serif; font-weight: bold; font-style: italic; text-shadow: 2px 2px 2px #bbb; line-height: 1.25em; }
 
+h1 { color: #ef3125; font-size: 48px; line-height: 1.25; margin-bottom: .8em; }
+h2 { color: #4d4d4d; font-size: 30px; line-height: 1.25; margin-bottom: 1em; }
+h3 { color: #4d4d4d; font-size: 24px; line-height: 1.25; margin-bottom: 1em; }
+
+h1 strong { font-size: 1.4em; }
+em { color: #000; font-style: italic; }
+
+ul {
+	list-style: disc; 
+	color: #4d4d4d;
+}
+ul li { color: #4d4d4d; margin: .8em }
+
+ul.bullets { font-size: 40px; line-height: 1.125em; }
+table { width: 100%; }
+
+#intro { position: relative; }
+	#intro h1 { font-size: 60px; }
+	#intro h2 { font-size: 48px; }
+	#intro .intro-credits { position: absolute; top: 485px; left: 0; width: 100%; height: 215px; background: transparent url(../master/oomph-133x182.png) no-repeat 850px 40px; border-top: 18px solid #f2262b; padding-top: 60px; }
+
+	#intro .intro-credits p { color: #4d4d4d; text-shadow: 2px 2px 2px #bbb; line-height: 30px; font-size: 28px; margin-left: 40px; line-height: 1.4em; font-style: italic; }
+
+dl { border-top: 2px solid #f2262b; border-bottom: 2px solid #f2262b; margin: 10px 0; padding: 20px;  }
+	dl dt { margin-left: 0; margin-top: .5em; color: #222; }
+	dl dd { margin-left: 20px; margin-bottom: 1.5em; color: #444; }
+
+.prompt { color: #aaa; }
+
+.code-container { width: 1000px; margin-left: -50px; height: 640px; margin-top: -20px; overflow-y: scroll }
+
+	dd.code-container { height: auto; margin-top: 0; margin-left: 0; width: auto; }
+.syntaxhighlighter { margin: 0 !important; font-size: 20px !important; }
+
+.pipe-to { line-height: 780px; }
+	.pipe-to span, .pipe-to strong { vertical-align: middle; }
+	.pipe-to span { font-size: 500px; display: inline-block; width: 0; }
+	.pipe-to strong { font-size: 120px; padding-left: 280px; color: #f2262b; }
 
