@@ -2,8 +2,19 @@
 	<head>
 		<title>WordCamp NYC 2012: WordPress on the Command Line – It's really not that scary!</title>
 
+		<!-- syntax highlighter styles -->
+		<link rel="stylesheet" href="../master/syntax-highlighter/styles/shCore.css" />
+		<!-- Pick a theme from /master/syntax-highlighter/styles/ -->
+		<link rel="stylesheet" href="../master/syntax-highlighter/styles/shThemeMidnight.css" />
+
+		<!-- master styles -->
 		<link rel="stylesheet" href="../master/style.css" />
 
+		<!-- syntax highlighter depends on XRegExp.js -->
+		<script type="text/javascript" src="../master/XRegExp.js"></script>
+		<script type="text/javascript" src="../master/syntax-highlighter/src/shCore.js"></script> 
+		<script type="text/javascript" src="../master/syntax-highlighter/scripts/shBrushBash.js"></script> 
+		<script type="text/javascript" src="../master/syntax-highlighter/scripts/shBrushPhp.js"></script> 
 	</head>
 	<body class="impress-not-supported">
 
@@ -39,11 +50,20 @@
 		<div class="step slide" data-x="1200" data-y="0">
 			<h1>It's fun! And powerful!</h1>
 
-			<h2>CLI interfaces make you look cool and let you get work done faster.</h2>
+			<h2 style="margin-bottom: 80px;">CLI interfaces make you look cool and let you get work done faster.</h2>
 
-			<p>Lots of time is spent wrangling GUI interfaces in order to get work done
-			that is always done faster by typing. In fact, the time spent moving from keyboard
-			to pointing device is time lost!</p>
+			<div style="float: left; width: 50%;">
+				<p>Every time you reach for this...</p>
+				<br/><br/>
+				<img src="mouse.jpg" />
+			</div>
+
+			<div style="float: left; width: 50%;">
+				<p>You're losing a little time.</p>
+				<br/><br/>
+
+				<img src="timelost.jpg" />
+			</div>
 		</div>
 
 		<div class="step slide" data-x="1200" data-y="900">
@@ -54,7 +74,7 @@
 				<dd>Your command prompt. Your mileage may vary.</dd>
 
 				<dt><span class="prompt">$</span> pwd</dt>
-				<dd>Your <strong>current working directory</strong>, or <em>cwd</em></dd>
+				<dd>Print your <strong>current working directory</strong>, or <em>cwd</em></dd>
 
 				<dt><span class="prompt">$</span> ls</dt>
 				<dd>List files in your <em>cwd</em></dd>
@@ -64,18 +84,201 @@
 			</dl>
 		</div>
 
-		<div class="step slide" data-x="3000" data-y="20">
-			<h1>Now That's Out of the Way...</h1>
+		<div class="step slide" data-x="0" data-y="900">
+			<h1>A Quick Journey...</h1>
+
+			<dl>
+				<dt><span class="prompt">$</span> ls</dt>
+				<dd><table><tr><td>Documents</td><td>Downloads</td><td>htdocs</td></tr><tr><td>wordcamp</td><td>wordpress</td></tr></table></dd>
+
+				<dt><span class="prompt">$</span> cd wordpress</dt>
+
+				<dt><span class="prompt">wordpress$</span> ls</dt>
+				<dd><table><tr><td>...</td></tr><tr><td>wp-config.php</td><td>wp-admin</td><td>wp-content</td></tr><tr><td>wp-cron.php</td><td>wp-includes</td><td>wp-feed.php</td></tr><tr><td>...</td></tr></table></dd>
+
+				<dt><span class="prompt">$</span> vim wp-config.php</dt>
+			</dl>
 		</div>
 
-		<div class="step slide" data-x="4000" data-y="20">
-			<h2><strong>wpsh</strong>: The Wordpress Shell.</h2>
+		<div class="step slide" data-x="0" data-y="2700">
+			<h1><strong>wpsh</strong>: The Wordpress Shell</h1>
 
-			<ul>
+			<br/>
+			<ul class="bullets">
 				<li>Call WordPress API functions in an interactive environment</li>
 
-				<li>Based on PHPShell.</li>
+				<li>Look up API source code via ctags</li>
+				
+				<li>Poke and prod the blog data</li>
+
+				<li>Based on <a href="http://www.phpsh.org/">PHPShell</a>, written in Python</li>
 			</ul>
+
+		</div>
+
+		<div class="step slide" data-x="1200" data-y="2700">
+			<h1>Let's make a WP Shell!</h1>
+
+			<div class="code-container">
+				<pre class="brush: bash">
+#!/bin/bash
+
+## This script must be run at the root of a WordPress install.
+## You must also supply a value for the HTTP_HOST server variable
+## which would normally be set by the web server.
+
+# Ensure that wp-config.php exists in the current directory.
+if [ ! -f ./wp-config.php ]; then
+	echo 'No wp-config.php file found in CWD'
+	exit;
+fi
+
+# Unreliable check for MULTISITE flag
+grep MULTISITE wp-config.php | grep true >/dev/null
+
+# Ensure that an HTTP_HOST argument is present for multi-blog
+# installs
+if [ "$?" = "0" -a "$1" = "" ]; then
+	echo "This is a multi-blog site. You must supply an HTTP_HOST as an argument"
+	exit;
+fi
+
+# Create a stub WP Shell launcher in the CWD. This sets HTTP_HOST, tells
+# WordPress not to use themes, and to load the ~/.wpshrc file for any additional
+if [ ! -f ./.wp-shell.php ]; then
+	cat >./.wp-shell.php &lt;&lt;XXX
+&lt;?php 
+\$_SERVER["HTTP_HOST"] = "$1"; 
+define("WP_USE_THEMES", false); 
+\$rcfile = \$_SERVER["HOME"] . '/.wpshrc';
+if( file_exists( \$rcfile ) ) {
+	echo "Including WPSH init file at \$rcfile";
+	require( \$rcfile );
+}
+require("./wp-load.php");
+XXX
+fi
+
+# Rebuild CTags file
+if [ ! -f tags ]; then
+	echo "Rebuilding ctags..."
+	ctags -R --languages=PHP
+fi
+
+# Launch PHP shell with the init scripts
+echo "Launching WP Shell..."
+phpsh ./.wp-shell.php
+				</pre>
+			</div>
+		</div>
+
+		<div class="step slide" data-x="2200" data-y="2700">
+			<div class="pipe-to">
+				<span>&gt;</span>
+				<strong>~/bin/wpsh</strong>
+			</div>
+
+			<p style="position: absolute; bottom: 40px; right: 60px;">Or wherever you want it...</p>
+		</div>
+
+		<div class="step slide" data-x="3600" data-y="3600">
+			<h1>Making it happen!</h1>
+
+			<dl>
+				<dt><span class="prompt">$</span> cd htdocs/wordpress</dt>
+
+				<dt><span class="prompt">$</span> wpsh</dt>
+				<dd class="code-container"><pre class="brush: bash">
+Launching WP Shell...
+Starting php with extra includes: ['./.wp-shell.php']
+ Loading ctags (in background)</pre></dd>
+
+				<dt><span class="prompt">php&gt;</span> print_r( get_blog_list( 0, 'all' ) );</dt>
+				<dd class="code-container"><pre class="brush: php">
+Array
+(
+    [0] => Array
+        (
+            [blog_id] => 14
+            [domain] => ptc.vip.local
+            [path] => /
+            [postcount] => 55
+        )
+
+    [1] => Array
+             ...				
+				</pre>
+			</dl>
+		</div>
+
+		<div class="step slide" data-x="4800" data-y="3600">
+			<h1>Now what?</h1>
+
+			<h2>Make it your own!</h2>
+
+			<ul>
+				<li>Edit <em>~/.wpshrc</em> to your liking</li>
+			</ul>
+
+			<pre class="brush: php">&lt;?php 
+/* Extra wpsh (WordPress shell) initialization code */
+
+/* Pretty print an array of hashes */
+function pp( $list ) {
+  foreach( $list as $item ) { 
+		foreach( $item as $key => $val ) print "$key=$val\t"; print "\n"; 
+	}
+}
+
+/* Dump out the list of blogs for this mult-site install */
+function show_blogs() {
+  pp( get_blog_list( 0, 'all' ) );
+}
+			</pre>
+
+
+			<p style="position: absolute; bottom: 40px; right: 60px;">Play around! This code is meant to make WPSH convenient for you!</p>
+		</div>
+
+		<div class="step slide" data-x="4800" data-y="3600">
+			<h1>Even more useful</h1>
+
+			<ul>
+				<li>Now that we've defined a couple of convenience functions in <em>~/.wpshrc</em> ...</li>
+			</ul>
+
+			<dl>
+				<dt><span class="prompt">php></span> show_blogs()</dt>
+				<dd class="code-container">
+					<pre class="brush: php">
+blog_id=14	domain=ptc.vip.local	path=/	postcount=55	
+blog_id=13	domain=venturebeat2.vip.local	path=/	postcount=3530	
+blog_id=12	domain=efc3.vip.local	path=/	postcount=6969	
+blog_id=11	domain=efc2.vip.local	path=/	postcount=3670	
+blog_id=10	domain=snf.vip.local	path=/	postcount=12	
+blog_id=9	domain=venturebeat-2.vip.local	path=/	postcount=130	
+blog_id=8	domain=venturebeat.vip.local	path=/	postcount=135	
+blog_id=7	domain=efc.vip.local	path=/	postcount=0	
+blog_id=6	domain=bossip.vip.local	path=/	postcount=347	
+blog_id=5	domain=hiphopwired.vip.local	path=/	postcount=5596	
+blog_id=4	domain=nbcsports.vip.local	path=/	postcount=232	
+blog_id=3	domain=247wallst.vip.local	path=/	postcount=619	
+blog_id=2	domain=allhiphop.vip.local	path=/	postcount=10575	
+blog_id=1	domain=vip.local	path=/	postcount=5</pre>
+				</dd>
+			</dl>
+		</div>
+		
+		<div id="credits" class="step slide" data-x="0" data-y="15000" >
+			Time Lost image from
+			http://dougbelshaw.com/blog/2009/02/20/under-promise-and-over-deliver-the-language-of-productivity/
+
+			WPSH concept from
+			http://vocecommunications.com/blog/2010/12/how-to-setup-an-interactive-wordpress-shell/
+
+			Syntax Highlighter engine from
+			http://alexgorbatchev.com/SyntaxHighlighter/
+		</div>
 
 	</div>
 
@@ -95,7 +298,7 @@
 			
 	-->
 	<script src="../master/impress.js"></script>
-	<script>impress().init();</script>
+	<script>SyntaxHighlighter.all(); impress().init();</script>
 
 	</body>
 </html>

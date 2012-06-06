@@ -1,0 +1,46 @@
+#!/bin/bash
+
+## This script must be run at the root of a WordPress install.
+## You must also supply a value for the HTTP_HOST server variable
+## which would normally be set by the web server.
+
+# Ensure that wp-config.php exists in the current directory.
+if [ ! -f ./wp-config.php ]; then
+	echo 'No wp-config.php file found in CWD'
+	exit;
+fi
+
+# Unreliable check for MULTISITE flag
+grep MULTISITE wp-config.php | grep true >/dev/null
+
+# Ensure that an HTTP_HOST argument is present for multi-blog
+# installs
+if [ "$?" = "0" -a "$1" = "" ]; then
+	echo "This is a multi-blog site. You must supply an HTTP_HOST as an argument"
+	exit;
+fi
+
+# Create a stub WP Shell launcher in the CWD. This sets HTTP_HOST, tells
+# WordPress not to use themes, and to load the ~/.wpshrc file for any additional
+# setup
+cat >./.wp-shell.php <<XXX
+<?php 
+\$_SERVER["HTTP_HOST"] = "$1"; 
+define("WP_USE_THEMES", false); 
+\$rcfile = \$_SERVER["HOME"] . '/.wpshrc';
+if( file_exists( \$rcfile ) ) {
+	echo "Including WPSH init file at \$rcfile";
+	require( \$rcfile );
+}
+require("./wp-load.php");
+XXX
+
+# Rebuild CTags file
+if [ ! -f tags ]; then
+	echo "Rebuilding ctags..."
+	ctags -R --languages=PHP
+fi
+
+# Launch PHP shell with the init scripts
+echo "Launching WP Shell..."
+phpsh ./.wp-shell.php
