@@ -58,7 +58,7 @@
 			<p>Plugin Author</p>
 		</div>
 
-		<div class="step slide" data-x="2000" data-y="0">
+		<div class="step slide" data-x="0" data-y="1800">
 			<h1>Why Are You Here?</h1>
 
 			<ul>
@@ -70,13 +70,13 @@
 			</ul>
 		</div>
 
-		<div class="step slide" data-x="2000" data-y="900">
+		<div class="step slide" data-x="2000" data-y="0">
 			<h1>Core?</h1>
 
 			<img src="assets/core-3.4.png" />
 		</div>
 
-		<div class="step slide" data-x="2000" data-y="1800">
+		<div class="step slide" data-x="2000" data-y="900">
 			<h1>Basic Structure</h1>
 
 			<ul>
@@ -139,20 +139,58 @@ function the_content($more_link_text = null, $stripteaser = false) {
 			</ul>
 		</div>
 
-		<div class="step slide" data-x="10000" data-y="900">
+		<div class="step slide" data-x="10000" data-y="0">
 			<h1>wp-includes</h1>
 
 			<ul>
 				<li>103 files</li>
 				<li>Three broad categories
 					<ul>
+						<li><strong>Classes:</strong> <code>class SimplePie</code>, <code>class WP_Http</code>, <code>class WP_Error</code></li>
 						<li><strong>Templating:</strong> <code>the_title()</code>, <code>the_content()</code></li>
 						<li><strong>Functional:</strong> <code>get_the_title()</code>, <code>get_the_content()</code></li>
-						<li><strong>Classes:</strong> <code>class SimplePie</code>, <code>class WP_Http</code>, <code>class WP_Error</code></li>
 					</ul>
 				</li>
 			</ul>
 		</div>
+
+		<div class="step slide" data-x="10000" data-y="900">
+			<h1>wp-includes classes</h1>
+
+			<ul>
+				<li>Files all start with <em>class-</em></li>
+				<li>Most have wrappers found in the other two types of files (templating and functional).</li>
+				<li>For this reason, there's often no reason to directly reference the classes herein. For example:
+					<ul>
+						<li><code>class-simplepie.php</code></li>
+						<li><code>fetch_feed()</code></li>
+					</ul>
+				</li>
+				<li>This helps explain why classes aren't always in one of the prefixed files.</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="12000" data-y="900">
+			<h1>wp-includes templating</h1>
+
+			<ul>
+				<li>Unlike classes, these files generally end with <em>-template</em></li>
+				<li>Two categories:
+					<ul>
+						<li><strong>Output (echo) something:</strong> <code>the_title()</code>, <code>the_content()</code></li>
+						<li><strong>Load something from the theme:</strong> <code>get_header()</code>, <code>get_sidebar()</code></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="14000" data-y="900">
+			<h1>wp-includes functional</h1>
+		</div>
+
+		<!--<div class="step slide" data-x="12000" data-y="900">
+			<h1>wp-includes/query.php</h1>
+		</div>-->
 
 		<div class="step slide" data-x="-4000" data-y="0">
 			<h1>ack!</h1>
