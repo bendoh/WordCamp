@@ -119,6 +119,16 @@ function the_content($more_link_text = null, $stripteaser = false) {
 			</div>
 		</div>
 
+		<div class="step slide" data-x="4000" data-y="1800" data-rotate="180">
+			<h1>Danger, Will Robinson!</h1>
+
+			<p style="margin-bottom: 100px;">You may encounter functions whose names are prefixed with an underscore. You may even be tempted to use them.</p>
+
+			<p style="margin-bottom: 100px;"><strong>Don't.</strong></p>
+
+			<p>The underscore prefix is WordPress' convention indicating an internal function not intended for public consumption.</p>
+		</div>
+
 		<div class="step slide" data-x="6000" data-y="0" data-rotate="45">
 			<h1>wp-admin</h1>
 
@@ -155,7 +165,7 @@ function the_content($more_link_text = null, $stripteaser = false) {
 		</div>
 
 		<div class="step slide" data-x="10000" data-y="900">
-			<h1>wp-includes classes</h1>
+			<h1>wp-includes <span>classes</span></h1>
 
 			<ul>
 				<li>Files all start with <em>class-</em></li>
@@ -171,7 +181,7 @@ function the_content($more_link_text = null, $stripteaser = false) {
 		</div>
 
 		<div class="step slide" data-x="12000" data-y="900">
-			<h1>wp-includes templating</h1>
+			<h1>wp-includes <span>templating</span></h1>
 
 			<ul>
 				<li>Unlike classes, these files generally end with <em>-template</em></li>
@@ -181,12 +191,73 @@ function the_content($more_link_text = null, $stripteaser = false) {
 						<li><strong>Load something from the theme:</strong> <code>get_header()</code>, <code>get_sidebar()</code></li>
 					</ul>
 				</li>
+				<li>Includes everything in the <a href="http://codex.wordpress.org/Template_Tags">Template Tags</a> section of the Codex.</li>
 			</ul>
 		</div>
 
 		<div class="step slide" data-x="14000" data-y="900">
-			<h1>wp-includes functional</h1>
+			<h1>wp-includes <span>functional</span></h1>
+
+			<ul>
+				<li>Generally, these functions return something.</li>
+				<li>They may retrieve something, manipulate something, or specify something.</li>
+				<li>Examples:
+					<ul>
+						<li><code>get_post()</code></li>
+						<li><code>esc_attr()</code></li>
+						<li><code>get_default_feed()</code></li>
+					</ul>
+				</li>
+				<li>Broadly encompasses the functions defined in the <a href="http://codex.wordpress.org/Function_Reference">Function Reference</a> portion of the Codex.</li>
+			</ul>
 		</div>
+
+		<div class="step slide" data-x="16000" data-y="0">
+			<h1>So how about some specifics?</h1>
+
+			<h2>With the high-level overview out of the way, let's talk details (relatively speaking).</h2>
+		</div>
+
+		<div class="step slide" data-x="16000" data-y="900">
+			<h1>Some important files to know about</h1>
+
+			<ul>
+				<!--<li>link-template.php</li>-->
+				<li>formatting.php</li>
+				<li>pluggable.php</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="16000" data-y="1800">
+			<h1>formatting-template.php</h1>
+
+			<div style="display: table-cell; text-align: center; vertical-align: middle; width: 900; height: 500;">
+				<img src="assets/escape-all.jpg" />
+			</div>
+		</div>
+
+		<div class="step slide" data-x="17300" data-y="1800">
+			<h1>formatting-template.php</h1>
+		</div>
+
+		<div class="step slide" data-x="16000" data-y="2700">
+		</div>
+
+		<!--<div class="step slide" data-x="16000" data-y="1800">
+			<h1>link-template.php</h1>
+
+			<ul>
+				<li>Many functions related to getting the URL of something in WordPress is in here.</li>
+				<li>Thanks to the functions herein, there's almost never any reason to hardcode a link or build a link manually.</li>
+				<li>Using these API functions ensures that if your site's URL, directory location, or permalink structure changes, your links will follow.</li>
+				<li>Examples:
+					<ul>
+						<li><code>get_permalink()</code></li>
+						<li><code>get_author_feed_link()</code></li>
+					</ul>
+				</li>
+			</ul>
+		</div>-->
 
 		<!--<div class="step slide" data-x="12000" data-y="900">
 			<h1>wp-includes/query.php</h1>
