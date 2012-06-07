@@ -5,7 +5,7 @@
 		<!-- syntax highlighter styles -->
 		<link rel="stylesheet" href="../master/syntax-highlighter/styles/shCore.css" />
 		<!-- Pick a theme from /master/syntax-highlighter/styles/ -->
-		<link rel="stylesheet" href="../master/syntax-highlighter/styles/shThemeMidnight.css" />
+		<link rel="stylesheet" href="../master/syntax-highlighter/styles/shThemeEclipse.css" />
 
 		<!-- master styles -->
 		<link rel="stylesheet" href="../master/style.css" />
@@ -69,7 +69,7 @@
 		<div class="step slide" data-x="1200" data-y="900">
 			<h1>The *NIX CLI: Crash Course</h1>
 
-			<dl>
+			<dl class="shell-flow big">
 				<dt><span class="prompt">$</span></dt>
 				<dd>Your command prompt. Your mileage may vary.</dd>
 
@@ -87,13 +87,14 @@
 		<div class="step slide" data-x="0" data-y="900">
 			<h1>A Quick Journey...</h1>
 
-			<dl>
+			<dl class="shell-flow big">
 				<dt><span class="prompt">$</span> ls</dt>
 				<dd><table><tr><td>Documents</td><td>Downloads</td><td>htdocs</td></tr><tr><td>wordcamp</td><td>wordpress</td></tr></table></dd>
 
-				<dt><span class="prompt">$</span> cd wordpress</dt>
-
-				<dt><span class="prompt">wordpress$</span> ls</dt>
+				<dt>
+					<span class="prompt">$</span> cd wordpress<br/></dt>
+					<span class="prompt">wordpress$</span> ls
+				</dt>
 				<dd><table><tr><td>...</td></tr><tr><td>wp-config.php</td><td>wp-admin</td><td>wp-content</td></tr><tr><td>wp-cron.php</td><td>wp-includes</td><td>wp-feed.php</td></tr><tr><td>...</td></tr></table></dd>
 
 				<dt><span class="prompt">$</span> vim wp-config.php</dt>
@@ -178,23 +179,25 @@ phpsh ./.wp-shell.php
 				<strong>~/bin/wpsh</strong>
 			</div>
 
-			<p style="position: absolute; bottom: 40px; right: 60px;">Or wherever you want it...</p>
+			<p class="footnote">Or wherever you want it. Make sure it's in your <em>$PATH</em>.</p>
 		</div>
 
 		<div class="step slide" data-x="3600" data-y="3600">
 			<h1>Making it happen!</h1>
 
-			<dl>
+			<dl class="shell-flow">
 				<dt><span class="prompt">$</span> cd htdocs/wordpress</dt>
-
-				<dt><span class="prompt">$</span> wpsh</dt>
-				<dd class="code-container"><pre class="brush: bash">
+				<dd><pre class="output">
+<span class="prompt">wordpress$</span> wpsh
 Launching WP Shell...
 Starting php with extra includes: ['./.wp-shell.php']
- Loading ctags (in background)</pre></dd>
-
+ Loading ctags (in background)
+type 'h' or 'help' to see instructions & features
+<span class="prompt">php&gt;</span>
+ </pre>
+				</dd>
 				<dt><span class="prompt">php&gt;</span> print_r( get_blog_list( 0, 'all' ) );</dt>
-				<dd class="code-container"><pre class="brush: php">
+				<dd><pre class="output">
 Array
 (
     [0] => Array
@@ -208,6 +211,7 @@ Array
     [1] => Array
              ...				
 				</pre>
+				</dd>
 			</dl>
 		</div>
 
@@ -237,20 +241,20 @@ function show_blogs() {
 			</pre>
 
 
-			<p style="position: absolute; bottom: 40px; right: 60px;">Play around! This code is meant to make WPSH convenient for you!</p>
+			<p class="footnote">Play around! This code is meant to make WPSH convenient for you!</p>
 		</div>
 
-		<div class="step slide" data-x="4800" data-y="3600">
+		<div class="step slide" data-x="6000" data-y="3600">
 			<h1>Even more useful</h1>
 
 			<ul>
 				<li>Now that we've defined a couple of convenience functions in <em>~/.wpshrc</em> ...</li>
 			</ul>
 
-			<dl>
+			<dl class="shell-flow">
 				<dt><span class="prompt">php></span> show_blogs()</dt>
-				<dd class="code-container">
-					<pre class="brush: php">
+				<dd>
+					<pre class="output">
 blog_id=14	domain=ptc.vip.local	path=/	postcount=55	
 blog_id=13	domain=venturebeat2.vip.local	path=/	postcount=3530	
 blog_id=12	domain=efc3.vip.local	path=/	postcount=6969	
@@ -268,7 +272,17 @@ blog_id=1	domain=vip.local	path=/	postcount=5</pre>
 				</dd>
 			</dl>
 		</div>
-		
+
+		<div class="step slide" data-x="7200" data-y="3600">
+			<h1>Scripting WPSH</h1>
+
+			<ul class="bullets">
+				<li>Now we can use <em>wpsh</em> just like a regular shell and write scripts!</li>
+
+				<li>This isn't much different from scripting bash.</li>
+			</ul>
+		</div>
+
 		<div id="credits" class="step slide" data-x="0" data-y="15000" >
 			Time Lost image from
 			http://dougbelshaw.com/blog/2009/02/20/under-promise-and-over-deliver-the-language-of-productivity/
