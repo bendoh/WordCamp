@@ -2,8 +2,18 @@
 	<head>
 		<title>WordCamp NYC 2012: Moving Beyond the Codex: Learning WordPress from Itself</title>
 
+		<!-- syntax highlighter styles -->
+		<link rel="stylesheet" href="../master/syntax-highlighter/styles/shCore.css" />
+		<!-- Pick a theme from /master/syntax-highlighter/styles/ -->
+		<link rel="stylesheet" href="../master/syntax-highlighter/styles/shThemeMidnight.css" />
+
 		<link rel="stylesheet" href="../master/style.css" />
 
+		<!-- syntax highlighter depends on XRegExp.js -->
+		<script type="text/javascript" src="../master/XRegExp.js"></script>
+		<script type="text/javascript" src="../master/syntax-highlighter/src/shCore.js"></script>
+		<script type="text/javascript" src="../master/syntax-highlighter/scripts/shBrushBash.js"></script>
+		<script type="text/javascript" src="../master/syntax-highlighter/scripts/shBrushPhp.js"></script>
 	</head>
 	<body class="impress-not-supported">
 
@@ -29,11 +39,15 @@
 			<h1>Moving Beyond the Codex</h1>
 
 			<h2>Learning WordPress from Itself</h2>
-
-			<p>By Erick Hitter (<a href="http://twitter.com/ethitter">@ethitter</a>) @ Oomph, Inc.</p>
+			<div class="intro-credits">
+				<p>Presented by Erick Hitter @ Oomph, Inc.</p>
+				<p><span class="email-label">Email:</span> erick@oomphinc.com</p>
+				<p><span class="twitter-label">Twitter:</span> <a href="http://twitter.com/ethitter">@ethitter</a></p>
+				<p><span class="skype-label">Skype:</span> ehitter.oomphinc</p>
+			</div>
 		</div>
 
-		<div class="step slide" data-x="1200" data-y="0">
+		<div class="step slide" data-x="0" data-y="900">
 			<h1>Who Am I?</h1>
 
 			<h2>(In other words, why should you care about anything I have to say)</h2>
@@ -44,39 +58,243 @@
 			<p>Plugin Author</p>
 		</div>
 
-		<div class="step slide" data-x="1200" data-y="900">
-			<h1>Why Are We Here?</h1>
-
-			<dl>
-				<dt><span class="prompt">$</span></dt>
-				<dd>Your command prompt. Your mileage may vary.</dd>
-
-				<dt><span class="prompt">$</span> pwd</dt>
-				<dd>Your <strong>current working directory</strong>, or <em>cwd</em></dd>
-
-				<dt><span class="prompt">$</span> ls</dt>
-				<dd>List files in your <em>cwd</em></dd>
-
-				<dt><span class="prompt">$</span> cd dir</dt>
-				<dd>Change <em>cwd</em> to <em>dir</em></dd>
-			</dl>
-		</div>
-
-		<div class="step slide" data-x="3000" data-y="20">
-			<h1>Now That's Out of the Way...</h1>
-		</div>
-
-		<div class="step slide" data-x="4000" data-y="20">
-			<h2><strong>wpsh</strong>: The Wordpress Shell.</h2>
+		<div class="step slide" data-x="0" data-y="1800">
+			<h1>Why Are You Here?</h1>
 
 			<ul>
-				<li>Call WordPress API functions in an interactive environment</li>
-
-				<li>Based on PHPShell.</li>
+				<li>Core can be confusing to navigate</li>
+				<li>Core is intimidating at first</li>
+				<li>You've encountered the limits of the <a href="http://codex.wordpress.org/">Codex</a></li>
+				<li>Googling for tutorials and tips isn't cutting it anymore</li>
+				<li><strong>You're curious</strong> (I hope)</li>
 			</ul>
+		</div>
+
+		<div class="step slide" data-x="2000" data-y="0">
+			<h1>Core?</h1>
+
+			<img src="assets/core-3.4.png" />
+		</div>
+
+		<div class="step slide" data-x="2000" data-y="900">
+			<h1>Basic Structure</h1>
+
+			<ul>
+				<li>/wp-admin/</li>
+				<li>/wp-content/ <small>(Your stuff, not relevant to this conversation)</small></li>
+				<li>/wp-includes/ <small>(We're going to focus on this)</small></li>
+				<li>Plus a bunch of files <small>(these aren't really relevant to this conversation)</small></li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="4000" data-y="0">
+			<h1>PHPDoc</h1>
+
+			<ul>
+				<li>Inline documentation appearing before many functions.</li>
+				<li>Specifies the arguments a function accepts, the other WordPress functions it uses, and its possible end results.</li>
+				<li>Powers the documentation found at <a href="http://phpdoc.wordpress.org/">http://phpdoc.wordpress.org/</a>.</li>
+				<li>Completeness varies. Older functions have either incomplete or no PHPDoc.</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="4000" data-y="900">
+			<h1>PHPDoc</h1>
+
+			<div class="code-container">
+				<pre class="brush: php; gutter: false;">/**
+ * Display the post content.
+ *
+ * @since 0.71
+ *
+ * @param string $more_link_text Optional. Content for when there is more text.
+ * @param bool $stripteaser Optional. Strip teaser content before the more text. Default is false.
+ */
+function the_content($more_link_text = null, $stripteaser = false) {
+	$content = get_the_content($more_link_text, $stripteaser);
+	$content = apply_filters('the_content', $content);
+	$content = str_replace(']]>', ']]&gt;', $content);
+	echo $content;
+}</pre>
+			</div>
+		</div>
+
+		<div class="step slide" data-x="4000" data-y="1800" data-rotate="180">
+			<h1>Danger, Will Robinson!</h1>
+
+			<p style="margin-bottom: 100px;">You may encounter functions whose names are prefixed with an underscore. You may even be tempted to use them.</p>
+
+			<p style="margin-bottom: 100px;"><strong>Don't.</strong></p>
+
+			<p>The underscore prefix is WordPress' convention indicating an internal function not intended for public consumption.</p>
+		</div>
+
+		<div class="step slide" data-x="6000" data-y="0" data-rotate="45">
+			<h1>wp-admin</h1>
+
+			<ul>
+				<li>Has its own <code>/includes/</code> directory.</li>
+				<li>Anything exclusively intended for the admin is here:
+					<ul>
+						<li>add_meta_box(), remove_meta_box()</li>
+						<li>WP_List_Table</li>
+						<li>admin-ajax.php</li>
+					</ul>
+				</li>
+				<li>Sometimes, things are here that probably shouldn't be:
+					<ul>
+						<li>wp_insert_link(), wp_update_link(), wp_delete_link()<br /><small>(Convention says they don't belong. More on that soon.)</small></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="10000" data-y="0">
+			<h1>wp-includes</h1>
+
+			<ul>
+				<li>103 files</li>
+				<li>Three broad categories
+					<ul>
+						<li><strong>Classes:</strong> <code>class SimplePie</code>, <code>class WP_Http</code>, <code>class WP_Error</code></li>
+						<li><strong>Templating:</strong> <code>the_title()</code>, <code>the_content()</code></li>
+						<li><strong>Functional:</strong> <code>get_the_title()</code>, <code>get_the_content()</code></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="10000" data-y="900">
+			<h1>wp-includes <span>classes</span></h1>
+
+			<ul>
+				<li>Files all start with <em>class-</em></li>
+				<li>Most have wrappers found in the other two types of files (templating and functional).</li>
+				<li>For this reason, there's often no reason to directly reference the classes herein. For example:
+					<ul>
+						<li><code>class-simplepie.php</code></li>
+						<li><code>fetch_feed()</code></li>
+					</ul>
+				</li>
+				<li>This helps explain why classes aren't always in one of the prefixed files.</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="12000" data-y="900">
+			<h1>wp-includes <span>templating</span></h1>
+
+			<ul>
+				<li>Unlike classes, these files generally end with <em>-template</em></li>
+				<li>Two categories:
+					<ul>
+						<li><strong>Output (echo) something:</strong> <code>the_title()</code>, <code>the_content()</code></li>
+						<li><strong>Load something from the theme:</strong> <code>get_header()</code>, <code>get_sidebar()</code></li>
+					</ul>
+				</li>
+				<li>Includes everything in the <a href="http://codex.wordpress.org/Template_Tags">Template Tags</a> section of the Codex.</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="14000" data-y="900">
+			<h1>wp-includes <span>functional</span></h1>
+
+			<ul>
+				<li>Generally, these functions return something.</li>
+				<li>They may retrieve something, manipulate something, or specify something.</li>
+				<li>Examples:
+					<ul>
+						<li><code>get_post()</code></li>
+						<li><code>esc_attr()</code></li>
+						<li><code>get_default_feed()</code></li>
+					</ul>
+				</li>
+				<li>Broadly encompasses the functions defined in the <a href="http://codex.wordpress.org/Function_Reference">Function Reference</a> portion of the Codex.</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="16000" data-y="0">
+			<h1>So how about some specifics?</h1>
+
+			<h2>With the high-level overview out of the way, let's talk details (relatively speaking).</h2>
+		</div>
+
+		<div class="step slide" data-x="16000" data-y="900">
+			<h1>Some important files to know about</h1>
+
+			<ul>
+				<!--<li>link-template.php</li>-->
+				<li>formatting.php</li>
+				<li>pluggable.php</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="16000" data-y="1800">
+			<h1>formatting-template.php</h1>
+
+			<div style="display: table-cell; text-align: center; vertical-align: middle; width: 900; height: 500;">
+				<img src="assets/escape-all.jpg" />
+			</div>
+		</div>
+
+		<div class="step slide" data-x="17300" data-y="1800">
+			<h1>formatting-template.php</h1>
+		</div>
+
+		<div class="step slide" data-x="16000" data-y="2700">
+		</div>
+
+		<!--<div class="step slide" data-x="16000" data-y="1800">
+			<h1>link-template.php</h1>
+
+			<ul>
+				<li>Many functions related to getting the URL of something in WordPress is in here.</li>
+				<li>Thanks to the functions herein, there's almost never any reason to hardcode a link or build a link manually.</li>
+				<li>Using these API functions ensures that if your site's URL, directory location, or permalink structure changes, your links will follow.</li>
+				<li>Examples:
+					<ul>
+						<li><code>get_permalink()</code></li>
+						<li><code>get_author_feed_link()</code></li>
+					</ul>
+				</li>
+			</ul>
+		</div>-->
+
+		<!--<div class="step slide" data-x="12000" data-y="900">
+			<h1>wp-includes/query.php</h1>
+		</div>-->
+
+		<div class="step slide" data-x="-4000" data-y="0">
+			<h1>ack!</h1>
+
+			<h2>Faster than grep (it's meant for programmers)</h2>
+
+			<p style="margin-bottom: 2em;">
+				<a href="http://betterthangrep.com/">http://betterthangrep.com/</a>
+			</p>
+
+			<pre class="brush: bash; gutter: false;">$ ack "class WP_User"
+wp-admin/includes/class-wp-users-list-table.php
+10:class WP_Users_List_Table extends WP_List_Table {
+
+wp-admin/includes/deprecated.php
+297:class WP_User_Search {
+
+wp-includes/capabilities.php
+359:class WP_User {
+
+wp-includes/user.php
+335:class WP_User_Query {
+
+</pre>
+		</div>
+
+		<div class="step slide" data-x="-4000" data-y="900">
+			<h1>Questions?</h1>
+
+			<p>Slides will be available at []</p>
+		</div>
 
 	</div>
-
 	<!--
 
 			Last, but not least.
@@ -93,7 +311,7 @@
 
 	-->
 	<script src="../master/impress.js"></script>
-	<script>impress().init();</script>
+	<script>SyntaxHighlighter.all(); impress().init();</script>
 
 	</body>
 </html>
