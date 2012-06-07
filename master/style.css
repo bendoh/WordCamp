@@ -375,3 +375,4 @@ small { font-size: 60%; }
 	.pipe-to span { font-size: 500px; display: inline-block; width: 0; }
 	.pipe-to strong { font-size: 120px; padding-left: 280px; color: #f2262b; }
 
+code { font-family: Courier;}
