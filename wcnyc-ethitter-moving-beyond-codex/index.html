@@ -430,7 +430,45 @@ function the_content($more_link_text = null, $stripteaser = false) {
 			</ul>
 		</div>
 
-		<div class="step slide" data-x="-4000" data-y="0">
+		<div class="step slide" data-x="16000" data-y="8100">
+			<h1>Catch-all files</h1>
+
+			<ul>
+				<li>functions.php
+					<ul>
+						<li><code>wp_list_filter()</code></li>
+						<li><code>wp_list_pluck()</code></li>
+						<li><code>wp_parse_args()</code></li>
+					</ul>
+				</li>
+				<li>general-template.php
+					<ul>
+						<li><code>get_header()</code></li>
+						<li><code>get_sidebar()</code></li>
+						<li><code>single_*_title()</code></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="16000" data-y="9000">
+			<h1>pluggable.php</h1>
+
+			<ul>
+				<li>On countless occasions, I've struggled to locate a function I know exists. Almost without fail, it's in <code>pluggable.php</code>.</li>
+				<li>The functions herein, such as <code>get_userdata()</code>, are defined in such a way that plugins can replace them.</li>
+				<li>This is useful, for example:
+					<ul>
+						<li>to provide an alternate login system;</li>
+						<li>to replace <code>wp_mail()</code>'s PHP mailer with an SMTP solution;</li>
+						<li>to modify comment notifications;</li>
+						<li>or to supplant PHP's default avatar system, Gravatar.</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="20000" data-y="9900">
 			<h1>ack!</h1>
 
 			<h2>Faster than grep (it's meant for programmers)</h2>
@@ -455,7 +493,7 @@ wp-includes/user.php
 </pre>
 		</div>
 
-		<div class="step slide" data-x="-4000" data-y="900">
+		<div class="step slide" data-x="21500" data-y="9900">
 			<h1>Questions?</h1>
 
 			<p>Slides will be available at []</p>
