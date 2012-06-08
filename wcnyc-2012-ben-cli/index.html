@@ -15,6 +15,7 @@
 		<script type="text/javascript" src="../master/syntax-highlighter/src/shCore.js"></script> 
 		<script type="text/javascript" src="../master/syntax-highlighter/scripts/shBrushBash.js"></script> 
 		<script type="text/javascript" src="../master/syntax-highlighter/scripts/shBrushPhp.js"></script> 
+		<script type="text/javascript" src="../master/syntax-highlighter/scripts/shBrushPerl.js"></script> 
 	</head>
 	<body class="impress-not-supported">
 
@@ -104,15 +105,24 @@
 		<div class="step slide" data-x="0" data-y="2700">
 			<h1><strong>wpsh</strong>: The Wordpress Shell</h1>
 
-			<br/>
 			<ul class="bullets">
-				<li>Call WordPress API functions in an interactive environment</li>
+				<li>Call WordPress API interactively</li>
 
 				<li>Look up API source code via ctags</li>
 				
 				<li>Poke and prod the blog data</li>
 
 				<li>Based on <a href="http://www.phpsh.org/">PHPShell</a>, written in Python</li>
+
+				<li>It gives you:
+				
+					<ul>
+						<li>Tab completion via ctags</li>
+						<li>Quick access to PHPDoc</li>
+						<li>Command-line editing via GNU readline</li>
+					</ul>
+				</li>
+
 			</ul>
 
 		</div>
@@ -128,37 +138,59 @@
 ## You must also supply a value for the HTTP_HOST server variable
 ## which would normally be set by the web server.
 
+# Define the WP Shell launcher template
+WPSH_LAUNCHER=$(cat &lt;&lt;'XXX'
+&lt;?php 
+define("WP_USE_THEMES", false); 	// No themes
+
+// Set value of HTTP_HOST to value of -h option
+// given to wpsh
+$_SERVER["HTTP_HOST"] = "%WP_HOST%";
+
+// Load the WP environment, cross fingers.
+require("./wp-load.php");
+
+// Load any extra rc file
+$rcfile = $_SERVER["HOME"] . '/.wpshrc';
+if( file_exists( $rcfile ) ) {
+	echo "Including WPSH init file at $rcfile";
+	require( $rcfile );
+}
+XXX)
+
+
 # Ensure that wp-config.php exists in the current directory.
 if [ ! -f ./wp-config.php ]; then
 	echo 'No wp-config.php file found in CWD'
 	exit;
 fi
 
+# Ensure that a -h HTTP_HOST argument is present for multi-blog
+# installs. Saves value into $WP_HOST shell variable
+getopts ":h:" opt 
+
+if [ "$opt" = ":" ]; then
+	echo "-h requires an argument, HTTP_HOST"
+	exit
+fi
+
+WP_HOST=$OPTARG
+
 # Unreliable check for MULTISITE flag
 grep MULTISITE wp-config.php | grep true >/dev/null
 
-# Ensure that an HTTP_HOST argument is present for multi-blog
-# installs
-if [ "$?" = "0" -a "$1" = "" ]; then
-	echo "This is a multi-blog site. You must supply an HTTP_HOST as an argument"
+MULTISITE=$?
+
+if [ "$MULTISITE" = "0" -a "$WP_HOST" = "" ]; then
+	echo "This is a WordPress MU instance."
+	echo "You must supply an -h argument for HTTP_HOST."
 	exit;
 fi
 
-# Create a stub WP Shell launcher in the CWD. This sets HTTP_HOST, tells
-# WordPress not to use themes, and to load the ~/.wpshrc file for any additional
-if [ ! -f ./.wp-shell.php ]; then
-	cat >./.wp-shell.php &lt;&lt;XXX
-&lt;?php 
-\$_SERVER["HTTP_HOST"] = "$1"; 
-define("WP_USE_THEMES", false); 
-\$rcfile = \$_SERVER["HOME"] . '/.wpshrc';
-if( file_exists( \$rcfile ) ) {
-	echo "Including WPSH init file at \$rcfile";
-	require( \$rcfile );
-}
-require("./wp-load.php");
-XXX
-fi
+# Subtitute tokens in the launcher template
+WPSH_LAUNCHER=${WPSH_LAUNCHER//%WP_HOST%/$WP_HOST}
+
+echo "$WPSH_LAUNCHER" >./.wp-shell.php
 
 # Rebuild CTags file
 if [ ! -f tags ]; then
@@ -166,10 +198,10 @@ if [ ! -f tags ]; then
 	ctags -R --languages=PHP
 fi
 
-# Launch PHP shell with the init scripts
+# Launch PHP shell with the launcher script
 echo "Launching WP Shell..."
 phpsh ./.wp-shell.php
-				</pre>
+</pre>
 			</div>
 		</div>
 
@@ -274,14 +306,293 @@ blog_id=1	domain=vip.local	path=/	postcount=5</pre>
 		</div>
 
 		<div class="step slide" data-x="7200" data-y="3600">
-			<h1>Scripting WPSH</h1>
+			<h1>Scripting WordPress</h1>
 
-			<ul class="bullets">
-				<li>Now we can use <em>wpsh</em> just like a regular shell and write scripts!</li>
+			<ul>
+				<li>In WPSH we load the WordPress environment and any dependencies</li>
 
-				<li>This isn't much different from scripting bash.</li>
+				<li>HTTP_HOST required for WordPress MU instances only</li>
+			</ul>
+
+			<h3>wp-helloworld.php</h3>
+
+			<pre class="brush: php">
+&lt;php
+$opts = getopt('h');
+define("WP_USE_THEMES", false); 	// No themes
+
+// Set value of HTTP_HOST to value of -h option
+// given to wpsh
+$_SERVER["HTTP_HOST"] = isset( $opts['h'] ) ? $opts['h'] : '';
+
+// Load the WP environment, cross fingers.
+require("./wp-load.php");
+
+// Do it!
+print_r( get_posts() );
+</pre>
+
+		</div>
+
+		<div class="step slide" data-x="0" data-y="5000">
+			<h1>Use Case: Export Bulk Data</h1>
+
+			<br/>
+			<ul>
+				<li>GUI export is limited in utility
+					<ul>
+						<li>Can't export huge batches of data: is slave to webserver memory limits</li>
+						<li>Can't be easily scripted</li>
+					</ul>
+					<br/>
+				</li>
+
+				<li>Core export routine in <code>wp-admin/includes/export.php</code>
+					<ul>
+						<li>Limited because of inability to specify dates, authors for "all posts"</li>
+					</ul>
+				</li>
 			</ul>
 		</div>
+
+		<div class="step slide" data-x="1200" data-y="5000">
+			<h1>First, A Quick Hack</h1>
+
+			<ul>
+				<li>Copy the entire wp_export.php function to your export script</li>
+				<li>Rename wp_export to my_cli_export, save in file of choice (e.g., my-wp-export.php)</li>
+			</ul>
+
+			<p>wp-admin/includes/export.php lines 68-77</p>
+
+			<hr/>
+			<pre class="brush: php; first-line: 68; gutter: false">
+	if ( 'post' == $args['content'] || 'page' == $args['content'] ) {
+		if ( $args['author'] )
+			$where .= $wpdb-&gt;prepare( 
+				" AND {$wpdb-&gt;posts}.post_author = %d",
+				$args['author']
+			);
+
+		if ( $args['start_date'] )
+			$where .= $wpdb-&gt;prepare( 
+				" AND {$wpdb-&gt;posts}.post_date &gt;= %s", 
+				date( 'Y-m-d', strtotime($args['start_date']) )
+			);
+
+		if ( $args['end_date'] )
+			$where .= $wpdb-&gt;prepare( 
+			" AND {$wpdb-&gt;posts}.post_date &lt; %s", 
+			date( 'Y-m-d', strtotime( '+1 month', 
+				strtotime( $args['end_date'] ) ) ) );
+	}
+</pre>
+		</div>
+
+		<div class="step slide" data-x="1200" data-y="5800" data-rotate="180">
+			<h1>Hacked and Patched</h1>
+
+			<pre class="brush: php; first-line: 68; gutter: false">
+// Silly restriction. Deny it
+
+//	if ( 'post' == $args['content'] || 'page' == $args['content'] ) {
+		if ( $args['author'] )
+			$where .= $wpdb-&gt;prepare( 
+				" AND {$wpdb-&gt;posts}.post_author = %d",
+				$args['author']
+			);
+
+		if ( $args['start_date'] )
+			$where .= $wpdb-&gt;prepare( 
+				" AND {$wpdb-&gt;posts}.post_date &gt;= %s", 
+				date( 'Y-m-d', strtotime($args['start_date']) )
+			);
+
+		if ( $args['end_date'] )
+			$where .= $wpdb-&gt;prepare( 
+			" AND {$wpdb-&gt;posts}.post_date &lt; %s", 
+			date( 'Y-m-d', strtotime( '+1 month', 
+				strtotime( $args['end_date'] ) ) ) );
+//	}
+</pre>
+		</div>
+
+		<div class="step slide" data-x="2400" data-y="5000">
+			<h1>Ready to Roll</h1>
+
+			<pre class="brush: php">
+&lt;?php
+$opts = getopt('h')
+define("WP_USE_THEMES", false); 	// No themes
+
+// Set value of HTTP_HOST to value of -h option
+// given to wpsh
+$_SERVER["HTTP_HOST"] = isset( $opts['h'] ) ? $opts['h'] : '';
+
+// Load the WP environment, cross fingers.
+require("./wp-load.php");
+
+require("./my-wp-export.php");
+
+wp_export();
+</pre>
+			
+			<br/>
+			<br/>
+
+			<div class="shell-flow">
+				<span class="prompt">wordpress$</span>  php cli-export.php
+				<br/>
+			</div>
+		</div>
+
+		<div class="step slide" data-x="3600" data-y="5000">
+			<br/>
+			<br/>
+			<div style="text-align: center"><img src="drool.png" /></div>
+		</div>
+
+		<div class="step slide" data-x="3600" data-y="7000" data-rotate="180">
+			<h1>Now the other direction</h1>
+
+			<ul class="bullets">
+				<li>Importing is always a more complex task</li>
+
+				<li>Many complications:
+					<ul>
+						<li>Memory limits</li>
+						<li>Author mapping</li>
+						<li>URL re-mapping</li>
+						<li>Asset aquisition</li>
+					</ul>
+				</li>
+
+			</ul>
+
+		</div>
+
+	
+
+		<div class="step slide" data-x="2400" data-y="7000" data-rotate="180">
+			<h1>Importing is a headache</h1>
+
+			<ul class="bullets">
+				<li>For very large imports of 50,000 or more posts, memory becomes a limiting factor.</li>
+
+				<li>Run out of memory during an import &rarr; lose data</li>
+
+				<li>Need to run import in chunks. Either:
+					<ul>
+						<li>Split the import file into distinct chunks. <small><a target="oomph-site" href="http://www.thinkoomph.com/thinking/2011-12/make-large-wordpress-import-files-manageable/">Here's how</a></small></li>
+						<li>Run import in harness</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+	<div class="step slide" data-x="1200" data-y="7000" data-rotate="180">
+			<h1>My <a href="cli-import.php.txt">cli-import.php</a></h1>
+
+			<p>Accepts the following arguments:</p>	
+
+			<dl class="args">
+				<dt>-h HTTP_HOST</dt><dd>- For MU instances</dd>
+				<dt>-b BLOGID</dt><dd>- Blog ID to operate on, for MU</dd>
+				<dt>-i J,K</dt><dd>- Process posts J thru K</dd>
+				<dt>-I #,#,...</dt><dd>- Process only specific post IDs</dd>
+				<dt>-a USERNAME</dt><dd>- Set default author name</dd>
+				<dt>-m MAPFILE</dt><dd>- Specify author mapping file</dd>
+				<dt>-f</dt><dd>- Import post attachments</dd>
+				<dt>-A, -T, -P</dt><dd>- Only Authors, Terms, Posts</dd>
+				<dt>-N</dt><dd>- Dry run</dd>
+				<dt>-l</dt><dd>- Save batch metadata</dd>
+				<dt>-L</dt><dd>- Load metadata, perform cleanup</dd>
+			</dl>
+		</div>
+		<div class="step slide" data-x="000" data-y="7000" data-rotate="180">
+			<h1>A Safety Harness</h1>
+
+			<div class="code-container">
+			<pre class="brush: perl">
+#!/usr/bin/perl
+
+use strict;
+use Getopt::Std;
+use POSIX qw(ceil);
+
+my (%opts);
+
+getopts( 'a:i:b:h:s:e:m:N', \%opts );
+
+my $file = shift @ARGV;
+
+die "You must specify an import file" unless $file;
+die "Import file $file does not exist" if !-f $file;
+
+my $size = 5000;
+my $start = 0;
+my $end = 0;
+my $args = '-f ';
+
+my $importer = `which cli-import.php`;
+
+die "Could not find importer cli-import.php in PATH" if !$importer;
+
+chomp $importer;
+
+usage( "Must specify an HTTP_HOST with -h" ) if !$opts{'h'};
+
+$args .= "-h $opts{'h'} ";
+
+usage( "Must specify a default author with -a" ) if !$opts{'a'};
+
+$args .= "-a $opts{'a'} ";
+
+$args .= "-b $opts{'b'} " if $opts{'b'};
+
+$args .= "-m $opts{'m'}" if $opts{'m'};
+
+$size = $opts{'s'} if $opts{'s'};
+$start = $opts{'i'} if $opts{'i'};
+$end = $opts{'e'} if $opts{'e'};
+
+my $nposts = `grep '&lt;item&gt;' $file | wc -l` =~ /(\d+)/ && $1;
+
+print "NPOSTS: $nposts\n";
+die "Couldn't determine number of posts in $file" if !$nposts;
+
+my $page = ceil( $start / $size ) + 1;
+
+$end = $nposts if !$end;
+
+print "Processing $nposts posts in $file in batches of $size (starting page=$page)\n";
+
+for( my $i = $start; $i &lt; $nposts && $i &lt; $end; $i += $size ) {
+	my $pageend = $i + $size;
+	$pageend = $end if $pageend &gt; $end;
+
+	my $cmd = "php $importer $args -i $i,$pageend";
+
+	$cmd .= ' -P' if $i &gt; 0;
+	
+	$cmd .= " -l $page";
+	$cmd .= " $file";
+
+	print "Processing $i-$pageend... \n";
+	print "&gt;&gt;&gt;&gt; PAGE $page &lt;&lt;&lt;&lt;&lt;\n\n";
+
+	print "&gt;&gt; $cmd\n";
+
+	system( $cmd ) unless $opts{'N'};
+
+	$page++;
+}
+system("php $importer $args -L $page $file");
+			</pre>
+			</div>
+
+		</div>
+
 
 		<div id="credits" class="step slide" data-x="0" data-y="15000" >
 			Time Lost image from

@@ -336,7 +336,6 @@ h3 { color: #4d4d4d; font-size: 24px; line-height: 1.25; margin-bottom: 1em; }
 
 h1 strong { font-size: 1.4em; }
 h1 span { color: #4d4d4d; }
-
 em { color: #000; font-style: italic; }
 strong { font-weight: bold; }
 
@@ -347,6 +346,8 @@ ul {
 	color: #4d4d4d;
 }
 ul li { color: #4d4d4d; margin: .8em }
+
+ul ul { font-size: 80%; line-height: 1.25em; }
 
 ul.bullets { font-size: 40px; line-height: 1.125em; }
 table { width: 100%; }
@@ -361,6 +362,11 @@ table { width: 100%; }
 dl { border-top: 2px solid #f2262b; border-bottom: 2px solid #f2262b; margin: 10px 0; padding: 20px;  }
 	dl dt { margin-left: 0; margin-top: .5em; color: #222; }
 	dl dd { margin-left: 20px; margin-bottom: 1.5em; color: #444; }
+
+dl.args { float: left; width: 100%; line-height: 1.1em; }
+dl.args dt, dl.args dd { float: left; padding: 0; margin: 0; font-size: 24px; }
+dl.args dt { clear: left; width: 35%; font-family: monospace}
+dl.args dd { color: #666; }
 
 small { font-size: 60%; }
 
