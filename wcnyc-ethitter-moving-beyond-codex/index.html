@@ -149,6 +149,45 @@ function the_content($more_link_text = null, $stripteaser = false) {
 			</ul>
 		</div>
 
+		<div class="step slide" data-x="6000" data-y="1300" data-rotate="45">
+			<h1>wp-admin</h1>
+
+			<h2>Basically, if it pertains to the admin interface, it's in <strong>wp-admin</strong>.</h2>
+
+			<h2>The underlying functions that handle interactions with the database, however, are in <strong>wp-includes</strong>.</h2>
+		</div>
+
+		<div class="step slide" data-x="6000" data-y="2600" data-rotate="45">
+			<h1>wp-admin <span>media</span></h1>
+
+			<ul>
+				<li>The functions that render the Media Library and provide for media management are in wp-admin.
+					<ul>
+						<li><code>media.php</code></li>
+						<li><code>media-new.php</code></li>
+						<li><code>media-upload.php</code></li>
+						<li><code>includes/media.php</code></li>
+					</ul>
+				</li>
+				<li>The functions that manipulate and retrieve media are in wp-includes.
+					<ul><li><code>media.php</code></li></ul>
+				</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="6000" data-y="3900" data-rotate="45">
+			<h1>wp-admin <span>meta boxes</span></h1>
+
+			<ul>
+				<li><code>add_meta_boxes</code> is an action in <code>wp-admin/edit-form-advanced.php</code>.</li>
+				<li><code>add_meta_box</code> is a function in <code>wp-admin/includes/template.php</code>.</li>
+				<li><code>save_post</code> is an action in <code>wp-includes/post.php</code>.</li>
+				</li>
+			</ul>
+
+			<h2>Again, presentation is in wp-admin, data handling is in <strong>wp-includes</strong>.</h2>
+		</div>
+
 		<div class="step slide" data-x="10000" data-y="0">
 			<h1>wp-includes</h1>
 
