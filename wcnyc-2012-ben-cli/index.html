@@ -262,7 +262,8 @@ Array
 /* Pretty print an array of hashes */
 function pp( $list ) {
   foreach( $list as $item ) { 
-		foreach( $item as $key => $val ) print "$key=$val\t"; print "\n"; 
+		foreach( $item as $key => $val ) print "$key=$val\t";
+		print "\n"; 
 	}
 }
 
@@ -359,13 +360,11 @@ print_r( get_posts() );
 			<h1>First, A Quick Hack</h1>
 
 			<ul>
-				<li>Copy the entire wp_export.php function to your export script</li>
-				<li>Rename wp_export to my_cli_export, save in file of choice (e.g., my-wp-export.php)</li>
+				<li>Copy the contents of <code>wp-admin/includes/wp_export.php</code> to your file of choice (e.g., my-wp-export.php)</li>
+				<li>Rename <code>export_wp()</code> to my_export_wp()</li>
+				<li>Hack lines 68-77</li>
 			</ul>
 
-			<p>wp-admin/includes/export.php lines 68-77</p>
-
-			<hr/>
 			<pre class="brush: php; first-line: 68; gutter: false">
 	if ( 'post' == $args['content'] || 'page' == $args['content'] ) {
 		if ( $args['author'] )
@@ -440,6 +439,8 @@ wp_export();
 			<br/>
 			<br/>
 
+			<h3>Let the magic begin!</h3>
+
 			<div class="shell-flow">
 				<span class="prompt">wordpress$</span>  php cli-export.php
 				<br/>
@@ -452,21 +453,23 @@ wp_export();
 			<div style="text-align: center"><img src="drool.png" /></div>
 		</div>
 
+		<img src="switch.png" style="position: absolute; left: 3600px; top: 6000px; -webkit-transform: rotate(90deg);">
+
 		<div class="step slide" data-x="3600" data-y="7000" data-rotate="180">
-			<h1>Now the other direction</h1>
+			<h1>Switch Directions: Import Bulk Data</h1>
 
 			<ul class="bullets">
 				<li>Importing is always a more complex task</li>
 
 				<li>Many complications:
 					<ul>
-						<li>Memory limits</li>
 						<li>Author mapping</li>
-						<li>URL re-mapping</li>
-						<li>Asset aquisition</li>
+						<li>URL re-mapping in post content and meta</li>
+						<li>Asset aquisition: new URLs?</li>
 					</ul>
 				</li>
 
+				<li>For very large imports (50,000+ posts,) memory becomes a limiting factor.</li>
 			</ul>
 
 		</div>
@@ -476,8 +479,9 @@ wp_export();
 		<div class="step slide" data-x="2400" data-y="7000" data-rotate="180">
 			<h1>Importing is a headache</h1>
 
+			<img src="import.jpg" />
+
 			<ul class="bullets">
-				<li>For very large imports of 50,000 or more posts, memory becomes a limiting factor.</li>
 
 				<li>Run out of memory during an import &rarr; lose data</li>
 
@@ -505,8 +509,8 @@ wp_export();
 				<dt>-f</dt><dd>- Import post attachments</dd>
 				<dt>-A, -T, -P</dt><dd>- Only Authors, Terms, Posts</dd>
 				<dt>-N</dt><dd>- Dry run</dd>
-				<dt>-l</dt><dd>- Save batch metadata</dd>
-				<dt>-L</dt><dd>- Load metadata, perform cleanup</dd>
+				<dt>-l I</dt><dd>- Save batch metadata to index I</dd>
+				<dt>-L J</dt><dd>- Load metadata from index J, perform final cleanup</dd>
 			</dl>
 		</div>
 		<div class="step slide" data-x="000" data-y="7000" data-rotate="180">
@@ -540,9 +544,10 @@ die "Could not find importer cli-import.php in PATH" if !$importer;
 
 chomp $importer;
 
-usage( "Must specify an HTTP_HOST with -h" ) if !$opts{'h'};
-
-$args .= "-h $opts{'h'} ";
+usage( "Must specify an HTTP_HOST with -h for WordPress MU" ) 
+  if $opts{'b'} &amp;&amp; !$opts{'h'};
+  
+$args .= "-h $opts{'h'} " if $opts{'h'};
 
 usage( "Must specify a default author with -a" ) if !$opts{'a'};
 
@@ -556,7 +561,7 @@ $size = $opts{'s'} if $opts{'s'};
 $start = $opts{'i'} if $opts{'i'};
 $end = $opts{'e'} if $opts{'e'};
 
-my $nposts = `grep '&lt;item&gt;' $file | wc -l` =~ /(\d+)/ && $1;
+my $nposts = `grep '&lt;item&gt;' $file | wc -l` =~ /(\d+)/ &amp;&amp; $1;
 
 print "NPOSTS: $nposts\n";
 die "Couldn't determine number of posts in $file" if !$nposts;
@@ -567,7 +572,7 @@ $end = $nposts if !$end;
 
 print "Processing $nposts posts in $file in batches of $size (starting page=$page)\n";
 
-for( my $i = $start; $i &lt; $nposts && $i &lt; $end; $i += $size ) {
+for( my $i = $start; $i &lt; $nposts &amp;&amp; $i &lt; $end; $i += $size ) {
 	my $pageend = $i + $size;
 	$pageend = $end if $pageend &gt; $end;
 
@@ -593,16 +598,40 @@ system("php $importer $args -L $page $file");
 
 		</div>
 
+		<div id="outro" class="step slide" data-x="0" data-y="8000">
+			<h1>That's All I Wrote!</h1>
 
-		<div id="credits" class="step slide" data-x="0" data-y="15000" >
-			Time Lost image from
-			http://dougbelshaw.com/blog/2009/02/20/under-promise-and-over-deliver-the-language-of-productivity/
+			<ul class="bullets">
+				<li>WordPress lends itself to CLI: But furtively</li>
 
-			WPSH concept from
-			http://vocecommunications.com/blog/2010/12/how-to-setup-an-interactive-wordpress-shell/
+				<li>WPSH + ctags = Happy Hacker Love</li>
 
-			Syntax Highlighter engine from
-			http://alexgorbatchev.com/SyntaxHighlighter/
+				<li>Exporting is kinda easy</li>
+
+				<li>Importing can be a hassle</li>
+			</ul>
+		</div>
+
+		<div id="credits" class="step slide" data-x="-2000" data-y="25000" data-z="3000" data-rotate="-90" >
+			<h1>Giving Credit Where Credit Is Due</h1>
+
+			<dl class="credits">
+				<dt>impress.js</dt>
+				<dd><a href="http://bartaz.github.com/impress.js">Bartosz Szopka</a></dd>
+
+				<dt>Time Lost image</dt>
+				<dd><a href="http://dougbelshaw.com/blog/2009/02/20/under-promise-and-over-deliver-the-language-of-productivity/">Doug Belshaw: Under-promise and Over-deliver: the language of productivity.</a></dd>
+
+				<dt>WPSH concept</dt>
+				<dd><a href="http://vocecommunications.com/blog/2010/12/how-to-setup-an-interactive-wordpress-shell/">Voce Communications: How to Setup an Interactive WordPress Shell</a></dd>
+
+				<dt>Syntax Highlighter engine</dt>
+				<dd><a href="http://alexgorbatchev.com/SyntaxHighlighter/">Alex Gorbatchev: Syntax Highlighter</a></dd>
+
+				<dt>Switch Directions image</dt>
+				<dd><a href="http://thesaleshunter.com/will-your-cusomter-really-switch-vendors-it-likely-will-cost-them-too-much/">The Sales Hunter: Will Your Customer Really Switch Vendors? It Likely Will Cost Them Too Much!</a></dd>
+			</dl>
+
 		</div>
 
 	</div>

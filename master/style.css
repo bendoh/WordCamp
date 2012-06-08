@@ -364,9 +364,11 @@ dl { border-top: 2px solid #f2262b; border-bottom: 2px solid #f2262b; margin: 10
 	dl dd { margin-left: 20px; margin-bottom: 1.5em; color: #444; }
 
 dl.args { float: left; width: 100%; line-height: 1.1em; }
-dl.args dt, dl.args dd { float: left; padding: 0; margin: 0; font-size: 24px; }
-dl.args dt { clear: left; width: 35%; font-family: monospace}
-dl.args dd { color: #666; }
+	dl.args dt, dl.args dd { float: left; padding: 0; margin: 0; font-size: 24px; }
+	dl.args dt { clear: left; width: 35%; font-family: monospace}
+	dl.args dd { color: #666; }
+
+dl.credits { font-size: 20px; line-height: 1.25em; }
 
 small { font-size: 60%; }
 
