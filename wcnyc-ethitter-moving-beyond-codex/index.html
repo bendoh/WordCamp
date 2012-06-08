@@ -5,7 +5,7 @@
 		<!-- syntax highlighter styles -->
 		<link rel="stylesheet" href="../master/syntax-highlighter/styles/shCore.css" />
 		<!-- Pick a theme from /master/syntax-highlighter/styles/ -->
-		<link rel="stylesheet" href="../master/syntax-highlighter/styles/shThemeMidnight.css" />
+		<link rel="stylesheet" href="../master/syntax-highlighter/styles/shThemeEclipse.css" />
 
 		<link rel="stylesheet" href="../master/style.css" />
 
@@ -136,14 +136,14 @@ function the_content($more_link_text = null, $stripteaser = false) {
 				<li>Has its own <code>/includes/</code> directory.</li>
 				<li>Anything exclusively intended for the admin is here:
 					<ul>
-						<li>add_meta_box(), remove_meta_box()</li>
-						<li>WP_List_Table</li>
-						<li>admin-ajax.php</li>
+						<li><code>add_meta_box()</code>, <code>remove_meta_box()</code></li>
+						<li><code>WP_List_Table</code></li>
+						<li><code>admin-ajax.php</code></li>
 					</ul>
 				</li>
 				<li>Sometimes, things are here that probably shouldn't be:
 					<ul>
-						<li>wp_insert_link(), wp_update_link(), wp_delete_link()<br /><small>(Convention says they don't belong. More on that soon.)</small></li>
+						<li><code>wp_insert_link()</code>, <code>wp_update_link()</code>, <code>wp_delete_link()</code><br /><small>(Convention says they don't belong. More on that soon.)</small></li>
 					</ul>
 				</li>
 			</ul>
