@@ -224,7 +224,7 @@ function the_content($more_link_text = null, $stripteaser = false) {
 
 			<ul>
 				<li>Unlike classes, these files generally end with <em>-template</em></li>
-				<li>Two categories:
+				<li>Two broad categories (I'll explain in a bit):
 					<ul>
 						<li><strong>Output (echo) something:</strong> <code>the_title()</code>, <code>the_content()</code></li>
 						<li><strong>Load something from the theme:</strong> <code>get_header()</code>, <code>get_sidebar()</code></li>
@@ -251,6 +251,15 @@ function the_content($more_link_text = null, $stripteaser = false) {
 			</ul>
 		</div>
 
+		<div class="step slide" data-x="14000" data-y="2700" data-rotate="180">
+			<h1>A note on WordPress convention</h1>
+			<ul>
+				<li>Any function that starts with <em>the_</em> echoes the data it receives from its <em>get_the_</em> counterpart, which returns its data.</li>
+				<li>The <em>the_</em> version can only be used in <a href="http://codex.wordpress.org/The_Loop">The Loop</a>, whereas its counterpart accepts the ID of an object.</li>
+				<li>For example: <code>the_content()</code> and <code>get_the_content()</code></li>
+			</ul>
+		</div>
+
 		<div class="step slide" data-x="16000" data-y="0">
 			<h1>So how about some specifics?</h1>
 
@@ -262,13 +271,16 @@ function the_content($more_link_text = null, $stripteaser = false) {
 
 			<ul>
 				<!--<li>link-template.php</li>-->
-				<li>formatting.php</li>
-				<li>pluggable.php</li>
+				<li><code>formatting.php</code></li>
+				<li><code>query.php</code></li>
+				<li><code>post.php</code></li>
+				<li><code>post-template.php</code></li>
+				<li><code>pluggable.php</code></li>
 			</ul>
 		</div>
 
 		<div class="step slide" data-x="16000" data-y="1800">
-			<h1>formatting-template.php</h1>
+			<h1>formatting.php</h1>
 
 			<div style="display: table-cell; text-align: center; vertical-align: middle; width: 900; height: 500;">
 				<img src="assets/escape-all.jpg" />
@@ -276,31 +288,147 @@ function the_content($more_link_text = null, $stripteaser = false) {
 		</div>
 
 		<div class="step slide" data-x="17300" data-y="1800">
-			<h1>formatting-template.php</h1>
+			<h1>formatting.php</h1>
+
+			<p>Joking aside, data validation and sanitization is essential. Thankfully, WordPress helps out immensely.</p>
+
+			<ul class="float-li">
+				<li><code>sanitize_text_field()</code></li>
+				<li><code>sanitize_user()</code></li>
+				<li><code>sanitize_title()</code></li>
+				<li><code>sanitize_title_for_query()</code></li>
+				<li><code>sanitize_sql_orderby()</code></li>
+				<li><code>sanitize_html_class()</code></li>
+				<li><code>esc_attr()</code></li>
+				<li><code>esc_html()</code></li>
+				<li><code>esc_url()</code></li>
+				<li><code>esc_url_raw()</code></li>
+			</ul>
 		</div>
 
 		<div class="step slide" data-x="16000" data-y="2700">
-		</div>
-
-		<!--<div class="step slide" data-x="16000" data-y="1800">
-			<h1>link-template.php</h1>
+			<h1>query.php</h1>
 
 			<ul>
-				<li>Many functions related to getting the URL of something in WordPress is in here.</li>
-				<li>Thanks to the functions herein, there's almost never any reason to hardcode a link or build a link manually.</li>
-				<li>Using these API functions ensures that if your site's URL, directory location, or permalink structure changes, your links will follow.</li>
-				<li>Examples:
+				<li>Contains the <code>WP_Query</code> class, or more simply put, code related to <a href="http://codex.wordpress.org/The_Loop">The Loop</a>.</li>
+				<li>To reiterate, this file holds the related functions used to instantiate The Loop and interact with the query.
 					<ul>
-						<li><code>get_permalink()</code></li>
-						<li><code>get_author_feed_link()</code></li>
+						<li><code style="text-decoration: line-through;">query_posts()</code></li>
+						<li><code>setup_postdata()</code></li>
+						<li><code>have_posts()</code></li>
+						<li><code>the_post()</code></li>
+						<li><code>get_query_var()</code></li>
+						<li><code>get_queried_object()</code>, <code>get_queried_object_id()</code></li>
+						<li><code>is_home()</code> et al</li>
+					</ul>
+				</li>
+				<li><code>get_post()</code> and <code>get_posts()</code>, however, are in <code>post.php</code></li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="16000" data-y="3600">
+			<h1>post.php</h1>
+
+			<ul>
+				<li>As mentioned, <code>get_post()</code> and <code>get_posts()</code> are in this file.</li>
+				<li>Contains all of the functions used to get information about a post, but not those needed to get the post itself. For example,
+					<ul>
+						<li><code>get_children()</code></li>
+						<li><code>get_post_format()</code>, <code>has_post_format()</code></li>
+						<li><code>get_post_status()</code></li>
+					</ul>
+				</li>
+				<li>Functions for manipulating a post's attributes are also here.
+					<ul>
+						<li><code>set_post_status()</code></li>
+						<li><code>add_post_meta()</code>, <code>update_post_meta()</code>
 					</ul>
 				</li>
 			</ul>
-		</div>-->
+		</div>
 
-		<!--<div class="step slide" data-x="12000" data-y="900">
-			<h1>wp-includes/query.php</h1>
-		</div>-->
+		<div class="step slide" data-x="17300" data-y="3600">
+			<h1>post.php</h1>
+
+			<ul>
+				<li>Also contains <code>register_post_type()</code> and <code>register_post_status()</code>.</li>
+				<li>Notice, however, that none of the functions used to retrieve or display a post's data (title, content, date, etc), are in <code>post.php</code>. Those are all in <code>post-template.php</code>.</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="16000" data-y="4500">
+			<h1>post-template.php</h1>
+
+			<ul>
+				<li>As previously discussed, the <em>-template</em> suffix indicates that this file contains functions that display something from a post to the end user.</li>
+				<li>Here you'll find <code>the_content()</code> and <code>get_the_content()</code>, <code>the_title()</code> and <code>get_the_title()</code>, <code>the_excerpt()</code> and <code>get_the_excerpt()</code>, and so on.</li>
+				<li>One exception sure to cause some grief, however, is any function pertaining to post thumbnails (featured images). Those are in <code>post-thumbnail-template.php</code>.</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="16000" data-y="5400">
+			<h1>More naming conventions</h1>
+
+			<ul>
+				<li><code>bookmark.php</code> and <code>bookmark-template.php</code></li>
+				<li><code>comment.php</code> and <code>comment-template.php</code></li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="16000" data-y="6300">
+			<h1>And now some exceptions</h1>
+
+			<ul>
+				<li>
+					<strong>Users/Authors</strong>
+					<ul>
+						<li><code>author-template.php</code></li>
+						<li><code>capabilities.php</code></li>
+						<li><code>user.php</code></li>
+					</ul>
+				</li>
+				<li>
+					<strong>Taxonomies</strong>
+					<ul>
+						<li><code>category.php</code> - covers categories and tags</li>
+						<li><code>category-template.php</code> - also covers categories and tags</li>
+						<li><code>taxonomy.php</code> - holds underlying functions used by the two aforementioned files, as well as everything pertaining to custom taxonomies</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="16000" data-y="7200">
+			<h1>link-template.php</h1>
+
+			<ul>
+				<li>Some functions related to getting the URL of something in WordPress is in here.
+					<ul>
+						<li><code>get_permalink()</code></li>
+						<li><code>the_permalink()</code></li>
+						<li><code>get_author_feed_link()</code></li>
+						<li><code>get_adjacent_post()</code></li>
+					</ul>
+				</li>
+				<li>
+					Many link functions, however, are in the file the links correspond to.
+					<ul>
+						<li><code>get_category_link()</code> in <code>category.php</code></li>
+						<li><code>get_term_link()</code> in <code>taxonomy.php</code></li>
+						<li><code>get_author_link()</code> in <code>author-template.php</code></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="17300" data-y="7200">
+			<h1>link-template.php</h1>
+
+			<ul>
+				<li>Thanks to the functions herein, there's almost never any reason to hardcode a link or build a link manually.</li>
+				<li>Using these API functions ensures that if your site's URL, directory location, or permalink structure changes, your links will follow.</li>
+			</ul>
+		</div>
 
 		<div class="step slide" data-x="-4000" data-y="0">
 			<h1>ack!</h1>
