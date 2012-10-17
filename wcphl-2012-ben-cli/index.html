@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>WordCamp NYC 2012: WordPress on the Command Line – It's really not that scary!</title>
+		<title>WordCamp Philly 2012: WordPress on the Command Line – Interact, Explore, Automate</title>
 
 		<!-- syntax highlighter styles -->
 		<link rel="stylesheet" href="../master/syntax-highlighter/styles/shCore.css" />
@@ -56,11 +56,9 @@
 			<ul class="bullets">
 				<li>Why CLI?</li>
 
-				<li>*NIX Crash Course</li>
-
-				<li><em>wpsh</em></li>
-
 				<li>Basic WordPress scripting</li>
+
+				<li><em>wpsh</em> - The WordPress Shell</li>
 
 				<li><em>wp-cli</em></li>
 
@@ -89,41 +87,6 @@
 			</div>
 		</div>
 
-		<div class="step slide" data-x="1200" data-y="900">
-			<h1>The *NIX CLI: Crash Course</h1>
-
-			<dl class="shell-flow big">
-				<dt><span class="prompt">$</span></dt>
-				<dd>Your command prompt. Your mileage may vary.</dd>
-
-				<dt><span class="prompt">$</span> pwd</dt>
-				<dd>Print your <strong>current working directory</strong>, or <em>cwd</em></dd>
-
-				<dt><span class="prompt">$</span> ls</dt>
-				<dd>List files in your <em>cwd</em></dd>
-
-				<dt><span class="prompt">$</span> cd dir</dt>
-				<dd>Change <em>cwd</em> to <em>dir</em></dd>
-			</dl>
-		</div>
-
-		<div class="step slide" data-x="0" data-y="900">
-			<h1>A Quick Journey...</h1>
-
-			<dl class="shell-flow big">
-				<dt><span class="prompt">$</span> ls</dt>
-				<dd><table><tr><td>Documents</td><td>Downloads</td><td>htdocs</td></tr><tr><td>wordcamp</td><td>wordpress</td></tr></table></dd>
-
-				<dt>
-					<span class="prompt">$</span> cd wordpress<br/></dt>
-					<span class="prompt">wordpress$</span> ls
-				</dt>
-				<dd><table><tr><td>...</td></tr><tr><td>wp-config.php</td><td>wp-admin</td><td>wp-content</td></tr><tr><td>wp-cron.php</td><td>wp-includes</td><td>wp-feed.php</td></tr><tr><td>...</td></tr></table></dd>
-
-				<dt><span class="prompt">$</span> vim wp-config.php</dt>
-			</dl>
-		</div>
-
 		<div class="step slide" data-x="0" data-y="2700">
 			<h1><strong>wpsh</strong>: The Wordpress Shell</h1>
 
@@ -136,13 +99,14 @@
 
 				<li>Based on <a href="http://www.phpsh.org/">PHPShell</a>, written in Python</li>
 
-				<li>It gives you:
+				<li>Comes with:
 				
 					<ul>
 						<li>Tab completion via ctags</li>
 						<li>Quick access to PHPDoc</li>
 						<li>Command-line editing via GNU readline</li>
 					</ul>
+
 				</li>
 
 			</ul>
@@ -337,7 +301,40 @@ blog_id=1	domain=vip.local	path=/	postcount=5</pre>
 				<li>HTTP_HOST required for WordPress MU instances only</li>
 			</ul>
 
-			<h3>wp-helloworld.php</h3>
+			<h3>Basic Example: wp-helloworld.php</h3>
+
+			<pre class="brush: php">
+&lt;php
+$opts = getopt('h');
+define("WP_USE_THEMES", false); 	// No themes
+
+// Set value of HTTP_HOST to value of -h option
+// given to wpsh
+$_SERVER["HTTP_HOST"] = isset( $opts['h'] ) ? $opts['h'] : '';
+
+// Load the WP environment, cross fingers.
+require("./wp-load.php");
+
+// Do it!
+print_r( get_posts() );
+</pre>
+
+		</div>
+
+		<div class="step slide" data-x="7200" data-y="4500">
+			<h1>Now What?</h1>
+
+			<ul>
+				<li>Load WordPress via <em>wp-load.php</em></li>
+
+				<li>Ensure proper blog is selected in MU via <em>-h</em> argument</li>
+			</ul>
+		</div>
+
+		
+		<div class="step slide">
+			
+			<h3>Basic Example: wp-helloworld.php</h3>
 
 			<pre class="brush: php">
 &lt;php
@@ -372,14 +369,30 @@ print_r( get_posts() );
 				<li><a href="https://github.com/wp-cli/wp-cli">Get it from Github</a></li>
 			</ul>
 
+			<h2>Easy Install!:</h2>
+
+			<dl class="shell-flow big">
+				<dt>
+					<span class="prompt">$</span> cd ~/git/<br/>
+					<span class="prompt">git$</span> git clone --recursive git://github.com/wp-cli/wp-cli.git wp-cli
+				</dt>
+
+				<hr />
+
+				<dt>
+					<span class="prompt">wp$</span> wp export</span>
+				</dt>
+				<dd>
+			</dl>
+
 		</div>
 
-		<div class="step slide" data-x="8400" data-y="3600">
+		<div class="step slide" data-x="9600" data-y="4500">
 			<h1>wp-cli example</h1>
 
 			<dl class="shell-flow big">
 				<dt>
-					<span class="prompt">$</span> cd ~/www/wp<br/></dt>
+					<span class="prompt">$</span> cd ~/www/wp<br/>
 					<span class="prompt">wp$</span> wp user list
 				</dt>
 
