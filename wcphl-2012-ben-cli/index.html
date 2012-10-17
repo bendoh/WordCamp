@@ -328,30 +328,24 @@ print_r( get_posts() );
 				<li>Load WordPress via <em>wp-load.php</em></li>
 
 				<li>Ensure proper blog is selected in MU via <em>-h</em> argument</li>
+
+				<li>But it could be better...</li>
 			</ul>
 		</div>
 
 		
-		<div class="step slide">
-			
-			<h3>Basic Example: wp-helloworld.php</h3>
+		<div class="step slide" data-x="8400" data-y="4500">
+			<h1>Principals of CLI Script Design</h1>
 
-			<pre class="brush: php">
-&lt;php
-$opts = getopt('h');
-define("WP_USE_THEMES", false); 	// No themes
+			<ul>
+				<li>Self-documenting</li>
 
-// Set value of HTTP_HOST to value of -h option
-// given to wpsh
-$_SERVER["HTTP_HOST"] = isset( $opts['h'] ) ? $opts['h'] : '';
+				<li>Provides argument examples</li>
 
-// Load the WP environment, cross fingers.
-require("./wp-load.php");
+				<li>Work with streams (stdin, stdout)</li>
 
-// Do it!
-print_r( get_posts() );
-</pre>
-
+				<li>Verbose</li>
+			</ul>
 		</div>
 
 		<div class="step slide" data-x="8400" data-y="3600">
@@ -375,14 +369,13 @@ print_r( get_posts() );
 				<dt>
 					<span class="prompt">$</span> cd ~/git/<br/>
 					<span class="prompt">git$</span> git clone --recursive git://github.com/wp-cli/wp-cli.git wp-cli
+					<span class="prompt">git$</span> cd wp-cli<br/>
+					<span class="prompt">git/wp-cli$</span> sudo utils/dev-build 
 				</dt>
-
-				<hr />
 
 				<dt>
-					<span class="prompt">wp$</span> wp export</span>
-				</dt>
-				<dd>
+					<span class="prompt">$</span> cd ~/www/wp<br/>
+					<span class="prompt">www/wp$</span> wp theme</spyhan>
 			</dl>
 
 		</div>
@@ -737,6 +730,9 @@ system("php $importer $args -L $page $file");
 
 				<dt>Syntax Highlighter engine</dt>
 				<dd><a href="http://alexgorbatchev.com/SyntaxHighlighter/">Alex Gorbatchev: Syntax Highlighter</a></dd>
+
+				<dt>wp-cli</dt>
+				<dd>Created by Andreas Creten, maintained by Cristi Burcă.</dd>
 
 				<dt>Switch Directions image</dt>
 				<dd><a href="http://thesaleshunter.com/will-your-cusomter-really-switch-vendors-it-likely-will-cost-them-too-much/">The Sales Hunter: Will Your Customer Really Switch Vendors? It Likely Will Cost Them Too Much!</a></dd>
