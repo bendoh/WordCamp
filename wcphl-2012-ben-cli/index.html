@@ -1,0 +1,756 @@
+<html>
+	<head>
+		<title>WordCamp NYC 2012: WordPress on the Command Line – It's really not that scary!</title>
+
+		<!-- syntax highlighter styles -->
+		<link rel="stylesheet" href="../master/syntax-highlighter/styles/shCore.css" />
+		<!-- Pick a theme from /master/syntax-highlighter/styles/ -->
+		<link rel="stylesheet" href="../master/syntax-highlighter/styles/shThemeEclipse.css" />
+
+		<!-- master styles -->
+		<link rel="stylesheet" href="../master/style.css" />
+
+		<!-- syntax highlighter depends on XRegExp.js -->
+		<script type="text/javascript" src="../master/XRegExp.js"></script>
+		<script type="text/javascript" src="../master/syntax-highlighter/src/shCore.js"></script> 
+		<script type="text/javascript" src="../master/syntax-highlighter/scripts/shBrushBash.js"></script> 
+		<script type="text/javascript" src="../master/syntax-highlighter/scripts/shBrushPhp.js"></script> 
+		<script type="text/javascript" src="../master/syntax-highlighter/scripts/shBrushPerl.js"></script> 
+	</head>
+	<body class="impress-not-supported">
+
+	<!--
+			For example this fallback message is only visible when there is `impress-not-supported` class on body.
+	-->
+	<div class="fallback-message">
+			<p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+			<p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+	</div>
+
+	<div class="hint">
+			<p>Use a spacebar or arrow keys to navigate</p>
+	</div>
+	<script>
+	if ("ontouchstart" in document.documentElement) { 
+			document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
+	}
+	</script>
+
+	<div id="impress">
+		<div id="intro" class="step slide" data-x="0" data-y="0">
+			<h1>WordPress on the Command-Line</h1>
+			<h2>Interact, Explore, Automate</h2>
+			
+			<div class="intro-credits">
+				<p>Presented by Ben Doherty @ Oomph, Inc.</p>
+				<p><span class="email-label">Email:</span> ben@oomphinc.com</p>
+				<p><span class="skype-label">Skype:</span> bdoherty.oomphinc</p>
+			</div>
+		</div>
+
+		<div class="step slide" data-x="0" data-y="-900">
+			<h1>Agenda</h1>
+			
+			<h2></h2>
+
+			<ul class="bullets">
+				<li>Why CLI?</li>
+
+				<li>*NIX Crash Course</li>
+
+				<li><em>wpsh</em></li>
+
+				<li>Basic WordPress scripting</li>
+
+				<li><em>wp-cli</em></li>
+
+				<li>Use cases</li>
+			</ul>
+
+		</div>
+
+		
+		<div class="step slide" data-x="1200" data-y="0">
+			<h1>It's fun! And powerful!</h1>
+
+			<h2 style="margin-bottom: 80px;">CLI interfaces make you look cool and let you get work done faster.</h2>
+
+			<div style="float: left; width: 50%;">
+				<p>Every time you reach for this...</p>
+				<br/><br/>
+				<img src="mouse.jpg" />
+			</div>
+
+			<div style="float: left; width: 50%;">
+				<p>You're losing a little time.</p>
+				<br/><br/>
+
+				<img src="timelost.jpg" />
+			</div>
+		</div>
+
+		<div class="step slide" data-x="1200" data-y="900">
+			<h1>The *NIX CLI: Crash Course</h1>
+
+			<dl class="shell-flow big">
+				<dt><span class="prompt">$</span></dt>
+				<dd>Your command prompt. Your mileage may vary.</dd>
+
+				<dt><span class="prompt">$</span> pwd</dt>
+				<dd>Print your <strong>current working directory</strong>, or <em>cwd</em></dd>
+
+				<dt><span class="prompt">$</span> ls</dt>
+				<dd>List files in your <em>cwd</em></dd>
+
+				<dt><span class="prompt">$</span> cd dir</dt>
+				<dd>Change <em>cwd</em> to <em>dir</em></dd>
+			</dl>
+		</div>
+
+		<div class="step slide" data-x="0" data-y="900">
+			<h1>A Quick Journey...</h1>
+
+			<dl class="shell-flow big">
+				<dt><span class="prompt">$</span> ls</dt>
+				<dd><table><tr><td>Documents</td><td>Downloads</td><td>htdocs</td></tr><tr><td>wordcamp</td><td>wordpress</td></tr></table></dd>
+
+				<dt>
+					<span class="prompt">$</span> cd wordpress<br/></dt>
+					<span class="prompt">wordpress$</span> ls
+				</dt>
+				<dd><table><tr><td>...</td></tr><tr><td>wp-config.php</td><td>wp-admin</td><td>wp-content</td></tr><tr><td>wp-cron.php</td><td>wp-includes</td><td>wp-feed.php</td></tr><tr><td>...</td></tr></table></dd>
+
+				<dt><span class="prompt">$</span> vim wp-config.php</dt>
+			</dl>
+		</div>
+
+		<div class="step slide" data-x="0" data-y="2700">
+			<h1><strong>wpsh</strong>: The Wordpress Shell</h1>
+
+			<ul class="bullets">
+				<li>Call WordPress API interactively</li>
+
+				<li>Look up API source code via ctags</li>
+				
+				<li>Poke and prod the blog data</li>
+
+				<li>Based on <a href="http://www.phpsh.org/">PHPShell</a>, written in Python</li>
+
+				<li>It gives you:
+				
+					<ul>
+						<li>Tab completion via ctags</li>
+						<li>Quick access to PHPDoc</li>
+						<li>Command-line editing via GNU readline</li>
+					</ul>
+				</li>
+
+			</ul>
+
+		</div>
+
+		<div class="step slide" data-x="1200" data-y="2700" style="border-right: 0; border-radius-top-right: 0; border-radius-bottom-right: 0;">
+			<h1>Let's make a WP Shell!</h1>
+
+			<div class="code-container">
+				<pre class="brush: bash">
+#!/bin/bash
+
+## This script must be run at the root of a WordPress install.
+## You must also supply a value for the HTTP_HOST server variable
+## which would normally be set by the web server.
+
+# Define the WP Shell launcher template
+WPSH_LAUNCHER=$(cat &lt;&lt;'XXX'
+&lt;?php 
+define("WP_USE_THEMES", false); 	// No themes
+
+// Set value of HTTP_HOST to value of -h option
+// given to wpsh
+$_SERVER["HTTP_HOST"] = "%WP_HOST%";
+
+// Load the WP environment, cross fingers.
+require("./wp-load.php");
+
+// Load any extra rc file
+$rcfile = $_SERVER["HOME"] . '/.wpshrc';
+if( file_exists( $rcfile ) ) {
+	echo "Including WPSH init file at $rcfile";
+	require( $rcfile );
+}
+XXX)
+
+
+# Ensure that wp-config.php exists in the current directory.
+if [ ! -f ./wp-config.php ]; then
+	echo 'No wp-config.php file found in CWD'
+	exit;
+fi
+
+# Ensure that a -h HTTP_HOST argument is present for multi-blog
+# installs. Saves value into $WP_HOST shell variable
+getopts ":h:" opt 
+
+if [ "$opt" = ":" ]; then
+	echo "-h requires an argument, HTTP_HOST"
+	exit
+fi
+
+WP_HOST=$OPTARG
+
+# Unreliable check for MULTISITE flag
+grep MULTISITE wp-config.php | grep true >/dev/null
+
+MULTISITE=$?
+
+if [ "$MULTISITE" = "0" -a "$WP_HOST" = "" ]; then
+	echo "This is a WordPress MU instance."
+	echo "You must supply an -h argument for HTTP_HOST."
+	exit;
+fi
+
+# Subtitute tokens in the launcher template
+WPSH_LAUNCHER=${WPSH_LAUNCHER//%WP_HOST%/$WP_HOST}
+
+echo "$WPSH_LAUNCHER" >./.wp-shell.php
+
+# Rebuild CTags file
+if [ ! -f tags ]; then
+	echo "Rebuilding ctags..."
+	ctags -R --languages=PHP
+fi
+
+# Launch PHP shell with the launcher script
+echo "Launching WP Shell..."
+phpsh ./.wp-shell.php
+</pre>
+			</div>
+		</div>
+
+		<div class="step slide" data-x="2200" data-y="2700" style="border-left: 0; border-radius-top-left: 0; border-radius-bottom-left: 0;">
+			<div class="pipe-to">
+				<span>&gt;</span>
+				<strong>~/bin/wpsh</strong>
+			</div>
+
+			<p class="footnote">Or wherever you want it. Make sure it's in your <em>$PATH</em>.</p>
+		</div>
+
+		<div class="step slide" data-x="3600" data-y="3600">
+			<h1>Making it happen!</h1>
+
+			<dl class="shell-flow">
+				<dt><span class="prompt">$</span> cd htdocs/wordpress</dt>
+				<dd><pre class="output">
+<span class="prompt">wordpress$</span> wpsh
+Launching WP Shell...
+Starting php with extra includes: ['./.wp-shell.php']
+ Loading ctags (in background)
+type 'h' or 'help' to see instructions & features
+<span class="prompt">php&gt;</span>
+ </pre>
+				</dd>
+				<dt><span class="prompt">php&gt;</span> print_r( get_blog_list( 0, 'all' ) );</dt>
+				<dd><pre class="output">
+Array
+(
+    [0] => Array
+        (
+            [blog_id] => 14
+            [domain] => ptc.vip.local
+            [path] => /
+            [postcount] => 55
+        )
+
+    [1] => Array
+             ...				
+				</pre>
+				</dd>
+			</dl>
+		</div>
+
+		<div class="step slide" data-x="4800" data-y="3600">
+			<h1>Now what?</h1>
+
+			<h2>Make it your own!</h2>
+
+			<ul>
+				<li>Edit <em>~/.wpshrc</em> to your liking</li>
+			</ul>
+
+			<pre class="brush: php">&lt;?php 
+/* Extra wpsh (WordPress shell) initialization code */
+
+/* Pretty print an array of hashes */
+function pp( $list ) {
+  foreach( $list as $item ) { 
+		foreach( $item as $key => $val ) print "$key=$val\t";
+		print "\n"; 
+	}
+}
+
+/* Dump out the list of blogs for this mult-site install */
+function show_blogs() {
+  pp( get_blog_list( 0, 'all' ) );
+}
+			</pre>
+
+
+			<p class="footnote">Play around! This code is meant to make WPSH convenient for you!</p>
+		</div>
+
+		<div class="step slide" data-x="6000" data-y="3600">
+			<h1>Even more useful</h1>
+
+			<ul>
+				<li>Now that we've defined a couple of convenience functions in <em>~/.wpshrc</em> ...</li>
+			</ul>
+
+			<dl class="shell-flow">
+				<dt><span class="prompt">php></span> show_blogs()</dt>
+				<dd>
+					<pre class="output">
+blog_id=14	domain=ptc.vip.local	path=/	postcount=55	
+blog_id=13	domain=venturebeat2.vip.local	path=/	postcount=3530	
+blog_id=12	domain=efc3.vip.local	path=/	postcount=6969	
+blog_id=11	domain=efc2.vip.local	path=/	postcount=3670	
+blog_id=10	domain=snf.vip.local	path=/	postcount=12	
+blog_id=9	domain=venturebeat-2.vip.local	path=/	postcount=130	
+blog_id=8	domain=venturebeat.vip.local	path=/	postcount=135	
+blog_id=7	domain=efc.vip.local	path=/	postcount=0	
+blog_id=6	domain=bossip.vip.local	path=/	postcount=347	
+blog_id=5	domain=hiphopwired.vip.local	path=/	postcount=5596	
+blog_id=4	domain=nbcsports.vip.local	path=/	postcount=232	
+blog_id=3	domain=247wallst.vip.local	path=/	postcount=619	
+blog_id=2	domain=allhiphop.vip.local	path=/	postcount=10575	
+blog_id=1	domain=vip.local	path=/	postcount=5</pre>
+				</dd>
+			</dl>
+		</div>
+
+		<div class="step slide" data-x="7200" data-y="3600">
+			<h1>Scripting WordPress</h1>
+
+			<ul>
+				<li>In WPSH we load the WordPress environment and any dependencies</li>
+
+				<li>HTTP_HOST required for WordPress MU instances only</li>
+			</ul>
+
+			<h3>wp-helloworld.php</h3>
+
+			<pre class="brush: php">
+&lt;php
+$opts = getopt('h');
+define("WP_USE_THEMES", false); 	// No themes
+
+// Set value of HTTP_HOST to value of -h option
+// given to wpsh
+$_SERVER["HTTP_HOST"] = isset( $opts['h'] ) ? $opts['h'] : '';
+
+// Load the WP environment, cross fingers.
+require("./wp-load.php");
+
+// Do it!
+print_r( get_posts() );
+</pre>
+
+		</div>
+
+		<div class="step slide" data-x="8400" data-y="3600">
+			<h1>wp-cli</h1>
+
+			<ul>
+				<li>Wraps all of the above stuff into a convenient shell command</li>
+
+				<li>Comes packaged with lots of atomic operations</li>
+
+				<li>Easy-to-use, extend, and is awesome</li>
+
+				<li>Site-specific commands can be put directly in your theme</li>
+
+				<li><a href="https://github.com/wp-cli/wp-cli">Get it from Github</a></li>
+			</ul>
+
+		</div>
+
+		<div class="step slide" data-x="8400" data-y="3600">
+			<h1>wp-cli example</h1>
+
+			<dl class="shell-flow big">
+				<dt>
+					<span class="prompt">$</span> cd ~/www/wp<br/></dt>
+					<span class="prompt">wp$</span> wp user list
+				</dt>
+
+				<hr />
+
+				<dt>
+					<span class="prompt">wp$</span> wp export</span>
+				</dt>
+				<dd>
+			</dl>
+
+			<h2>Easy as Pie!</h2>
+		</div>
+
+		<div class="step slide" data-x="9600" data-y="3600">
+			<h1>Roll-your-own</h1>
+
+			<p>In your theme's <em>functions.php</em>:</p>
+
+			<pre class="brush: php">
+if( defined( 'WP_CLI' ) &amp;&amp; WP_CLI ) {
+	require( 'functions/class-my-cli.php' );
+}
+</pre>
+		</div>
+
+		<div class="step slide" data-x="10800" data-y="3600">
+			<h1>Add a Command, Sub-Commands</h1>
+
+			<p>In your new <em>functions/class-my-cli.php</em>:</p>
+
+			<pre class="brush: php">
+class My_CLI extends WP_CLI_Command {
+	function add_meta() {
+		foreach( get_posts( 'posts_per_page=-1' ) as $post ) {
+			$random = rand();
+			
+			update_post_meta( $post->ID, '_random_number', $rand );
+
+			WP_CLI::out( "Added $rand to post $post->ID" );
+		}	
+	}
+}
+WP_CLI::add_command( 'mystuff', 'My_CLI' );
+		</div>
+
+		<div class="step slide" data-x="0" data-y="5000">
+			<h1>Use Case: Export Bulk Data</h1>
+
+			<br/>
+			<ul>
+				<li>GUI export is limited in utility
+					<ul>
+						<li>Can't export huge batches of data: is slave to webserver memory limits</li>
+						<li>Can't be easily scripted</li>
+					</ul>
+					<br/>
+				</li>
+
+				<li>Core export routine in <code>wp-admin/includes/export.php</code>
+					<ul>
+						<li>Limited because of inability to specify dates, authors for "all posts"</li>
+					</ul>
+				</li>
+
+				<li><em>wp-cli</em> uses core export routine</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="1200" data-y="5000">
+			<h1>First, A Quick Hack</h1>
+
+			<ul>
+				<li>Copy the contents of <code>wp-admin/includes/wp_export.php</code> to your file of choice (e.g., my-wp-export.php)</li>
+				<li>Rename <code>export_wp()</code> to my_export_wp()</li>
+				<li>Hack lines 68-77</li>
+			</ul>
+
+			<pre class="brush: php; first-line: 68; gutter: false">
+	if ( 'post' == $args['content'] || 'page' == $args['content'] ) {
+		if ( $args['author'] )
+			$where .= $wpdb-&gt;prepare( 
+				" AND {$wpdb-&gt;posts}.post_author = %d",
+				$args['author']
+			);
+
+		if ( $args['start_date'] )
+			$where .= $wpdb-&gt;prepare( 
+				" AND {$wpdb-&gt;posts}.post_date &gt;= %s", 
+				date( 'Y-m-d', strtotime($args['start_date']) )
+			);
+
+		if ( $args['end_date'] )
+			$where .= $wpdb-&gt;prepare( 
+			" AND {$wpdb-&gt;posts}.post_date &lt; %s", 
+			date( 'Y-m-d', strtotime( '+1 month', 
+				strtotime( $args['end_date'] ) ) ) );
+	}
+</pre>
+		</div>
+
+		<div class="step slide" data-x="1200" data-y="5800" data-rotate="180">
+			<h1>Hacked and Patched</h1>
+
+			<pre class="brush: php; first-line: 68; gutter: false">
+// Silly restriction. Deny it
+
+//	if ( 'post' == $args['content'] || 'page' == $args['content'] ) {
+		if ( $args['author'] )
+			$where .= $wpdb-&gt;prepare( 
+				" AND {$wpdb-&gt;posts}.post_author = %d",
+				$args['author']
+			);
+
+		if ( $args['start_date'] )
+			$where .= $wpdb-&gt;prepare( 
+				" AND {$wpdb-&gt;posts}.post_date &gt;= %s", 
+				date( 'Y-m-d', strtotime($args['start_date']) )
+			);
+
+		if ( $args['end_date'] )
+			$where .= $wpdb-&gt;prepare( 
+			" AND {$wpdb-&gt;posts}.post_date &lt; %s", 
+			date( 'Y-m-d', strtotime( '+1 month', 
+				strtotime( $args['end_date'] ) ) ) );
+//	}
+</pre>
+		</div>
+
+		<div class="step slide" data-x="2400" data-y="5000">
+			<h1>Ready to Roll</h1>
+
+			<pre class="brush: php">
+&lt;?php
+$opts = getopt('h')
+define("WP_USE_THEMES", false); 	// No themes
+
+// Set value of HTTP_HOST to value of -h option
+// given to wpsh
+$_SERVER["HTTP_HOST"] = isset( $opts['h'] ) ? $opts['h'] : '';
+
+// Load the WP environment, cross fingers.
+require("./wp-load.php");
+
+require("./my-wp-export.php");
+
+wp_export();
+</pre>
+			
+			<br/>
+			<br/>
+
+			<h3>Let the magic begin!</h3>
+
+			<div class="shell-flow">
+				<span class="prompt">wordpress$</span>  php cli-export.php
+				<br/>
+			</div>
+		</div>
+
+		<div class="step slide" data-x="3600" data-y="5000">
+			<br/>
+			<br/>
+			<div style="text-align: center"><img src="drool.png" /></div>
+		</div>
+
+		<img src="switch.png" style="position: absolute; left: 3600px; top: 6000px; -webkit-transform: rotate(90deg);">
+
+		<div class="step slide" data-x="3600" data-y="7000" data-rotate="180">
+			<h1>Switch Directions: Import Bulk Data</h1>
+
+			<ul class="bullets">
+				<li>Importing is always a more complex task</li>
+
+				<li>Many complications:
+					<ul>
+						<li>Author mapping</li>
+						<li>URL re-mapping in post content and meta</li>
+						<li>Asset aquisition: new URLs?</li>
+					</ul>
+				</li>
+
+				<li>For very large imports (50,000+ posts,) memory becomes a limiting factor.</li>
+			</ul>
+
+		</div>
+
+	
+
+		<div class="step slide" data-x="2400" data-y="7000" data-rotate="180">
+			<h1>Importing is a headache</h1>
+
+			<img src="import.jpg" />
+
+			<ul class="bullets">
+
+				<li>Run out of memory during an import &rarr; lose data</li>
+
+				<li>Need to run import in chunks. Either:
+					<ul>
+						<li>Split the import file into distinct chunks. 
+							<small><a target="oomph-site" href="http://www.thinkoomph.com/thinking/2011-12/make-large-wordpress-import-files-manageable/">Here's how</a></small></li>
+
+						<li>Run import in harness</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+	<div class="step slide" data-x="1200" data-y="7000" data-rotate="180">
+			<h1>My <a href="cli-import.php.txt">cli-import.php</a></h1>
+
+			<p>Accepts the following arguments:</p>	
+
+			<dl class="args">
+				<dt>-h HTTP_HOST</dt><dd>- For MU instances</dd>
+				<dt>-b BLOGID</dt><dd>- Blog ID to operate on, for MU</dd>
+				<dt>-i J,K</dt><dd>- Process posts J thru K</dd>
+				<dt>-I #,#,...</dt><dd>- Process only specific post IDs</dd>
+				<dt>-a USERNAME</dt><dd>- Set default author name</dd>
+				<dt>-m MAPFILE</dt><dd>- Specify author mapping file</dd>
+				<dt>-f</dt><dd>- Import post attachments</dd>
+				<dt>-A, -T, -P</dt><dd>- Only Authors, Terms, Posts</dd>
+				<dt>-N</dt><dd>- Dry run</dd>
+				<dt>-l I</dt><dd>- Save batch metadata to index I</dd>
+				<dt>-L J</dt><dd>- Load metadata from index J, perform final cleanup</dd>
+			</dl>
+		</div>
+		<div class="step slide" data-x="000" data-y="7000" data-rotate="180">
+			<h1>A Safety Harness</h1>
+
+			<div class="code-container">
+			<pre class="brush: perl">
+#!/usr/bin/perl
+
+use strict;
+use Getopt::Std;
+use POSIX qw(ceil);
+
+my (%opts);
+
+getopts( 'a:i:b:h:s:e:m:N', \%opts );
+
+my $file = shift @ARGV;
+
+die "You must specify an import file" unless $file;
+die "Import file $file does not exist" if !-f $file;
+
+my $size = 5000;
+my $start = 0;
+my $end = 0;
+my $args = '-f ';
+
+my $importer = `which cli-import.php`;
+
+die "Could not find importer cli-import.php in PATH" if !$importer;
+
+chomp $importer;
+
+usage( "Must specify an HTTP_HOST with -h for WordPress MU" ) 
+  if $opts{'b'} &amp;&amp; !$opts{'h'};
+  
+$args .= "-h $opts{'h'} " if $opts{'h'};
+
+usage( "Must specify a default author with -a" ) if !$opts{'a'};
+
+$args .= "-a $opts{'a'} ";
+
+$args .= "-b $opts{'b'} " if $opts{'b'};
+
+$args .= "-m $opts{'m'}" if $opts{'m'};
+
+$size = $opts{'s'} if $opts{'s'};
+$start = $opts{'i'} if $opts{'i'};
+$end = $opts{'e'} if $opts{'e'};
+
+my $nposts = `grep '&lt;item&gt;' $file | wc -l` =~ /(\d+)/ &amp;&amp; $1;
+
+print "NPOSTS: $nposts\n";
+die "Couldn't determine number of posts in $file" if !$nposts;
+
+my $page = ceil( $start / $size ) + 1;
+
+$end = $nposts if !$end;
+
+print "Processing $nposts posts in $file in batches of $size (starting page=$page)\n";
+
+for( my $i = $start; $i &lt; $nposts &amp;&amp; $i &lt; $end; $i += $size ) {
+	my $pageend = $i + $size;
+	$pageend = $end if $pageend &gt; $end;
+
+	my $cmd = "php $importer $args -i $i,$pageend";
+
+	$cmd .= ' -P' if $i &gt; 0;
+	
+	$cmd .= " -l $page";
+	$cmd .= " $file";
+
+	print "Processing $i-$pageend... \n";
+	print "&gt;&gt;&gt;&gt; PAGE $page &lt;&lt;&lt;&lt;&lt;\n\n";
+
+	print "&gt;&gt; $cmd\n";
+
+	system( $cmd ) unless $opts{'N'};
+
+	$page++;
+}
+system("php $importer $args -L $page $file");
+			</pre>
+			</div>
+
+		</div>
+
+		<div id="outro" class="step slide" data-x="0" data-y="8000">
+			<h1>That's All I Wrote!</h1>
+
+			<ul class="bullets">
+				<li>WordPress lends itself to CLI: But furtively</li>
+
+				<li>WPSH + ctags = Happy Hacker Love</li>
+
+				<li>wp-cli wraps this all up for you</li>
+
+				<li>Exporting is kinda easy</li>
+
+				<li>Importing can be a hassle</li>
+			</ul>
+		</div>
+
+		<div id="credits" class="step slide" data-x="-2000" data-y="25000" data-z="3000" data-rotate="-90" >
+			<h1>Giving Credit Where Credit Is Due</h1>
+
+			<dl class="credits">
+				<dt>impress.js</dt>
+				<dd><a href="http://bartaz.github.com/impress.js">Bartosz Szopka</a></dd>
+
+				<dt>Time Lost image</dt>
+				<dd><a href="http://dougbelshaw.com/blog/2009/02/20/under-promise-and-over-deliver-the-language-of-productivity/">Doug Belshaw: Under-promise and Over-deliver: the language of productivity.</a></dd>
+
+				<dt>WPSH concept</dt>
+				<dd><a href="http://vocecommunications.com/blog/2010/12/how-to-setup-an-interactive-wordpress-shell/">Voce Communications: How to Setup an Interactive WordPress Shell</a></dd>
+
+				<dt>Syntax Highlighter engine</dt>
+				<dd><a href="http://alexgorbatchev.com/SyntaxHighlighter/">Alex Gorbatchev: Syntax Highlighter</a></dd>
+
+				<dt>Switch Directions image</dt>
+				<dd><a href="http://thesaleshunter.com/will-your-cusomter-really-switch-vendors-it-likely-will-cost-them-too-much/">The Sales Hunter: Will Your Customer Really Switch Vendors? It Likely Will Cost Them Too Much!</a></dd>
+			</dl>
+
+		</div>
+
+	</div>
+
+	<!--
+			
+			Last, but not least.
+			
+			To make all described above really work, you need to include impress.js in the page.
+			I strongly encourage to minify it first.
+			
+			In here I just include full source of the script to make it more readable.
+			
+			You also need to call a `impress().init()` function to initialize impress.js presentation.
+			And you should do it in the end of your document. Not only because it's a good practice, but also
+			because it should be done when the whole document is ready.
+			Of course you can wrap it in any kind of "DOM ready" event, but I was too lazy to do so ;)
+			
+	-->
+	<script src="../master/impress.js"></script>
+	<script>SyntaxHighlighter.all(); impress().init();</script>
+
+	</body>
+</html>
+
