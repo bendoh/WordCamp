@@ -1,0 +1,99 @@
+#!/usr/bin/perl
+
+use strict;
+use Getopt::Std;
+use POSIX qw(ceil);
+
+sub usage {
+	my $message = shift;
+
+	print STDERR "ERROR: $message\n\n" if( $message );
+
+	die <<"EOU";
+Usage: $0 -a USERNAME -h HOSTNAME FILENAME
+Options:
+  -a USERNAME  -  Set default author name
+  -b BLOGID    -  Set to the blog ID of the blog to import into. Only applicable for WordPress MU instance
+  -h HOSTNAME  -  Set HTTP host (REQUIRED for WordPress MU)
+  -i J         -  Process starting at post J
+  -e K         -  Stop processing at post K
+  -m MAPFILE   -  Use MAPFILE to determine author mapping. Simple comma-separated list, two entries per line.
+  -N           -  Do nothing. Just show steps.
+  -V           -  Log Verbose Setting (3 = all, 2 = normal, 1 = minimal), defaults 3
+  -s           -  Page size.
+  FILENAME     -  The path to the WXR file to import. Can be - for stdin.
+EOU
+}
+
+my (%opts);
+
+getopts( 'a:i:b:h:s:e:m:N:vV:', \%opts );
+
+my $file = shift @ARGV;
+
+usage( "You must specify an import file" ) unless $file;
+die "Import file $file does not exist" if !-f $file;
+
+my $size = 5000;
+my $start = 0;
+my $end = 0;
+my $args = '-f ';
+
+my $importer = `which cli-import.php`;
+
+die "Could not find importer cli-import.php in PATH" if !$importer;
+
+chomp $importer;
+
+usage( "Must specify an HTTP_HOST with -h for WordPress MU" ) 
+  if $opts{'b'} && !$opts{'h'};
+  
+$args .= "-h $opts{'h'} " if $opts{'h'};
+
+usage( "Must specify a default author with -a" ) if !$opts{'a'};
+
+$args .= "-a $opts{'a'} ";
+
+$args .= "-b $opts{'b'} " if $opts{'b'};
+
+$args .= "-m $opts{'m'}" if $opts{'m'};
+$args .= "-V $opts{'V'}" if $opts{'V'};
+$args .= "-V 3" if !$opts{'V'};
+
+$size = $opts{'s'} if $opts{'s'};
+$start = $opts{'i'} if $opts{'i'};
+$end = $opts{'e'} if $opts{'e'};
+
+my $nposts = `grep '<item>' $file | wc -l` =~ /(\d+)/ && $1;
+
+print "NPOSTS: $nposts\n";
+die "Couldn't determine number of posts in $file" if !$nposts;
+
+my $page = ceil( $start / $size ) + 1;
+
+$end = $nposts if !$end;
+
+print "Processing $nposts posts in $file in batches of $size (starting page=$page)\n";
+
+for( my $i = $start; $i < $nposts && $i < $end; $i += $size ) {
+	my $pageend = $i + ($size - 1);
+	$pageend = $end if $pageend > $end;
+
+	my $cmd = "php $importer $args -i $i,$pageend";
+
+	$cmd .= ' -P' if $i > 0;
+	
+	$cmd .= " -l $page";
+	$cmd .= " $file";
+
+	print "\nProcessing $i-$pageend... \n";
+	print ">>>> PAGE $page <<<<<\n\n";
+
+	print ">> $cmd\n";
+
+	system( $cmd ) unless $opts{'N'};
+
+	$page++;
+}
+$page--;
+system("php $importer $args -L $page $file");

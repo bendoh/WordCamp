@@ -1,0 +1,15 @@
+<?php 
+/* Extra wpsh (WordPress shell) initialization code */
+ 
+/* Pretty print an array of hashes */
+function pp( $list ) {
+  foreach( $list as $item ) { 
+        foreach( $item as $key => $val ) print "$key=$val\t";
+        print "\n"; 
+    }
+}
+ 
+/* Dump out the list of blogs for this mult-site install */
+function show_blogs() {
+  pp( get_blog_list( 0, 'all' ) );
+}

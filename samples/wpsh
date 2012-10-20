@@ -1,0 +1,70 @@
+#!/bin/bash
+
+## This script must be run at the root of a WordPress install.
+## You must also supply a value for the HTTP_HOST server variable
+## which would normally be set by the web server.
+
+# Define the WP Shell launcher template
+WPSH_LAUNCHER=$(cat <<'XXX'
+<?php 
+define("WP_USE_THEMES", false); 	// No themes
+
+// Set value of HTTP_HOST to value of -h option
+// given to wpsh
+$_SERVER["HTTP_HOST"] = "%WP_HOST%";
+
+// Load the WP environment, cross fingers.
+require("./wp-load.php");
+
+// Load any extra rc file
+$rcfile = $_SERVER["HOME"] . '/.wpshrc';
+if( file_exists( $rcfile ) ) {
+	echo "Including WPSH init file at $rcfile";
+	require( $rcfile );
+}
+XXX)
+
+
+# Ensure that wp-config.php exists in the current directory.
+if [ ! -f ./wp-config.php ]; then
+	echo 'No wp-config.php file found in CWD'
+	exit;
+fi
+
+
+# Ensure that a -h HTTP_HOST argument is present for multi-blog
+# installs. Saves value into $WP_HOST shell variable
+getopts ":h:" opt 
+
+if [ "$opt" = ":" ]; then
+	echo "-h requires an argument, HTTP_HOST"
+	exit
+fi
+
+WP_HOST=$OPTARG
+
+# Unreliable check for MULTISITE flag
+grep MULTISITE wp-config.php | grep true >/dev/null
+
+MULTISITE=$?
+
+if [ "$MULTISITE" = "0" -a "$WP_HOST" = "" ]; then
+	echo "This is a WordPress MU instance."
+	echo "You must supply an -h argument for HTTP_HOST."
+	exit;
+fi
+
+# Subtitute tokens in the launcher template
+WPSH_LAUNCHER=${WPSH_LAUNCHER//%WP_HOST%/$WP_HOST}
+
+echo "$WPSH_LAUNCHER" >./.wp-shell.php
+
+# Rebuild CTags file
+if [ ! -f tags ]; then
+	echo "Rebuilding ctags..."
+	ctags -R --languages=PHP
+fi
+
+# Launch PHP shell with the launcher script
+echo "Launching WP Shell..."
+phpsh ./.wp-shell.php
