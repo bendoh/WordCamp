@@ -339,6 +339,7 @@ h1 span { color: #4d4d4d; }
 em { color: #000; font-style: italic; }
 strong { font-weight: bold; }
 
+h1.center { text-align: center; }
 a, a:visited { color: #EF3125; }
 
 ul {
@@ -400,3 +401,17 @@ small { font-size: 60%; }
 .footnote { position: absolute; bottom: 40px; right: 60px; }
 
 code { font-family: Courier; }
+
+img.code-sample { margin-left: -49px; }
+
+.overlap { position: relative; }
+.overlap > * { position: absolute; top: 0; left: 0; }
+
+.center { position: absolute; width: 100%; text-align: center; left: 0; }
+	ul.center li { text-align: left; padding: 20px; list-style: inside; }
+
+ul.smaller li { padding: 15px; font-size: 35px; }
+
+ul.split-4 li { width: 20%; float: left; padding: 2%; margin: 0; text-align: center; }
+
+.leader { text-align: center; font-size: 64px; }
