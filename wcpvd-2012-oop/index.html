@@ -1,0 +1,243 @@
+<html>
+	<head>
+		<title>WordCamp Providence 2012: OOP for WordPress Theme Development</title>
+
+		<!-- syntax highlighter styles -->
+		<link rel="stylesheet" href="../master/syntax-highlighter/styles/shCore.css" />
+		<!-- Pick a theme from /master/syntax-highlighter/styles/ -->
+		<link rel="stylesheet" href="../master/syntax-highlighter/styles/shThemeEclipse.css" />
+
+		<!-- master styles -->
+		<link rel="stylesheet" href="../master/style.css" />
+
+		<!-- syntax highlighter depends on XRegExp.js -->
+		<script type="text/javascript" src="../master/jquery-1.8.2.min.js"></script>
+		<script type="text/javascript" src="../master/XRegExp.js"></script>
+		<script type="text/javascript" src="../master/syntax-highlighter/src/shCore.js"></script> 
+		<script type="text/javascript" src="../master/syntax-highlighter/scripts/shBrushBash.js"></script> 
+		<script type="text/javascript" src="../master/syntax-highlighter/scripts/shBrushPhp.js"></script> 
+		<script type="text/javascript" src="../master/syntax-highlighter/scripts/shBrushPerl.js"></script> 
+
+		<script>
+		window.impressSubsteps = {};
+		
+		window.impressSubsteps['reveal'] = function(slide, slideIndex, slideData) {
+			var $hidden = $('.reveal > *:hidden', slide);
+
+			if($hidden.length == 0)
+				return true;
+
+			$hidden.eq(0).fadeIn();	
+
+			return false;
+		}
+		</script>
+	</head>
+	<body class="impress-not-supported">
+
+	<!--
+			For example this fallback message is only visible when there is `impress-not-supported` class on body.
+	-->
+	<div class="fallback-message">
+			<p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+			<p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+	</div>
+
+	<div class="hint">
+			<p>Use a spacebar or arrow keys to navigate</p>
+	</div>
+	<script>
+	if ("ontouchstart" in document.documentElement) { 
+			document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</" + "p>";
+	}
+	</script>
+
+	<div id="impress">
+		<div id="intro" class="step slide">
+			<h1>OOP for Theme Development</h1>
+			
+			<div class="intro-credits">
+				<p>Presented by Ben Doherty @ Oomph, Inc.</p>
+				<p><span class="email-label">Email:</span> ben@oomphinc.com</p>
+				<p><span class="skype-label">Skype:</span> bdoherty.oomphinc</p>
+			</div>
+		</div>
+
+		<div class="step slide" data-x="1200">
+			<h1>About Oomph</h1>
+
+			<img src="oomph-large.png" style="display: block; margin: 30px auto;" />
+
+			<img src="box-office.jpg" style="display: block; float: left" />
+			<p>Located right here in sunny Providence, Rhode Island!</p>
+		</div>
+
+		<div class="step slide" data-x="2400" data-substep="reveal">
+			<h1>Ben Doherty</h1>
+
+			<ul class="reveal bullets center smaller">
+				<li>WordPress enthusiast</li>
+
+				<li>Plugin Developer</li>
+
+				<li>Themer</li>
+
+				<li>Tech Director</li>
+
+				<li>Total Nerd</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="3600" data-substep="reveal">
+			<h1>Why OOP?</h1>
+
+			<ul class="reveal center">
+				<li>
+					<h2>Modularity</h2>
+
+					<p>Chunks of functionality become distinct pieces</p>
+				</li>
+
+				<li>
+					<h2>Re-usability</h2>
+
+					<p>Just re-name a class (and maybe actions / filters) and it's ready for another theme.</p>
+				</li>
+
+				<li>
+					<h2>Encapsulation</h2>
+
+					<p>All related code is tucked away in a single place.</p>
+				</li>
+			</ul>
+
+		</div>
+
+		<div class="step slide" data-x="4800">
+			<h1 class="center">Why OOP in WordPress?</h1>
+
+		</div>
+
+		<div class="step slide" data-x="4800" data-y="900" data-substep="reveal">
+			<h1>1. Namespacing</h1>
+
+			<div class="reveal overlap">
+				<img class="code-sample" src="images/simple-sweet_post-meta-box.png" alt="Code Sample" />
+				<img class="code-sample" src="images/oop-sweet_post-meta-box.png" alt="OOP Code Sample" />
+			</div>
+		</div>
+
+		<div class="step slide" data-x="4800" data-y="1800" data-substep="reveal">
+			<h1>2. Code Re-Use</h1>
+
+			<div class="reveal overlap">
+				<img class="code-sample revealed" src="images/oop-sweet_post-meta-box.png" alt="OOP Code Sample: My_Sweet_Meta_Box" />
+				<img class="code-sample" src="images/oop-your_sweet_post-meta-box.png" alt="OOP Code Sample: Your_Sweet_Meta_Box" />
+			</div>
+		</div>
+
+
+		<div class="step slide" data-x="4800" data-y="2700" data-substep="reveal">
+			<h1>3. Consistency</h1>
+
+			<ul class="reveal center bullets">
+				<li>Objects can follow similar patterns</li>
+
+				<li>Predictable patterns = easy-to-read code</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="4800" data-y="3600" data-substep="reveal">
+			<h1>4. Boilerplate-Ready</h1>
+
+			<ul class="reveal center bullets">
+				<li>Create easily-populated code templates</li>
+
+				<li>Templates can represent various base functions to be filled in</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="4800" data-y="4800" data-rotate="90">
+			<h1 class="center">Coding Principals</h1>
+		</div>
+
+		<div class="step slide" data-x="3600" data-y="4800" data-rotate="90" data-substep="reveal">
+			<h1 class="leader">KISS</h1>
+
+			<img src="images/kiss.jpg" alt="KISS!" style="display: block; margin: 10px auto;" />
+
+			<ul class="reveal bullets split-4" style="width: 80%; margin: 15px auto;">
+				<li>Keep</li>
+
+				<li>It</li>
+
+				<li>Simple</li>
+
+				<li>Stupid</li>
+			</ul>
+
+		</div>
+
+		<div class="step slide" data-x="2700" data-y="4800" data-rotate="90" data-substep="reveal">
+			<h1 class="leader">DRY</h1>
+
+			<img src="images/kiss.jpg" alt="KISS!" style="display: block; margin: 10px auto;" />
+
+			<ul class="reveal bullets split-4" style="margin-top: 200px; text-align: center; padding: 0 50px;  width: 80%">
+				<li>Keep</li>
+
+				<li>It</li>
+
+				<li>Simple</li>
+
+				<li>Stupid</li>
+			</ul>
+
+		</div>
+
+
+		<div class="step slide" data-x="0" data-y="900" data-substep="reveal">
+			<h1>Credits</h1>
+
+			<ul class="bullets">
+				<li>Credit 1...</li>
+
+				<li>Credit 2...</li>
+			</ul>
+		</div>
+	</div>
+
+	<!--
+			
+			Last, but not least.
+			
+			To make all described above really work, you need to include impress.js in the page.
+			I strongly encourage to minify it first.
+			
+			In here I just include full source of the script to make it more readable.
+			
+			You also need to call a `impress().init()` function to initialize impress.js presentation.
+			And you should do it in the end of your document. Not only because it's a good practice, but also
+			because it should be done when the whole document is ready.
+			Of course you can wrap it in any kind of "DOM ready" event, but I was too lazy to do so ;)
+			
+	-->
+	<script src="../master/impress.js"></script>
+	<script>
+		SyntaxHighlighter.all(); 
+		$('#impress').bind('impress:init', function() {
+			$('.center').each(function() {
+				$(this).css('top', ($(this).parents('.slide').height() - $(this).height()) / 2);
+			})
+
+			$('.reveal > *:not(.revealed)').hide();
+		});
+
+		$('#impress').on('impress:stepwillenter', '[data-substep="reveal"]', function() {
+			$('.reveal > *:not(.revealed)', this).hide();
+		});
+
+		impress().init();</script>
+	</body>
+</html>
+
