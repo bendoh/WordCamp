@@ -1,0 +1,39 @@
+<?php
+class My_Sweet_Meta_Box {
+	var $meta_key = 'sweet_post';
+	var $nonce = 'sweet_post_nonce';
+
+	function __construct() {
+		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
+		add_action( 'save_post', array( $this, 'action_save_post' ) );
+		add_filter( 'sweet_post_meta_key', array( $this, 'filter_sweet_post_meta_key' ) );
+	}
+
+	function add_meta_boxes() {
+		add_meta_box( $this->meta_key . '-meta-box', "Sweet Post?", array( $this, 'meta_box' ),
+					  'post', 'side' );
+	}
+
+	function meta_box( $post ) { ?>
+		<label>
+			<input type="checkbox" value="1" name="<?php echo esc_attr( $this->meta_key ); ?>"
+				<?php checked( get_post_meta( $post->ID, $this->meta_key, true ) ) ?> />
+			This post is sweet.
+		</label>
+
+		<?php wp_nonce_field( $this->nonce, $this->nonce );	
+	}
+
+	function action_save_post( $post_id ) {
+		if( !isset( $_POST[$this->nonce] ) || 
+			!wp_verify_nonce( $_POST[$this->nonce], $this->nonce ) )
+			return;
+
+		if( isset( $_POST[$this->meta_key] ) && $_POST[$this->meta_key] )
+			update_post_meta( $post_id, $this->meta_key, true );
+		else
+			delete_post_meta( $post_id, $this->meta_key );
+	}
+
+	function filter_sweet_post_meta_key( $key ) { return $this->meta_key; }
+}

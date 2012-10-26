@@ -1,0 +1,163 @@
+<?php
+/*
+ * iOne Widget Base Class 
+ *
+ * Simplifies widget development by providing a consistent
+ * option processing interface and offering the ability 
+ * to hide/show widgets before any markup is produced
+ * 
+ * @extends WP_Widget
+ *
+ * Pass widget arguments through here
+ */
+class My_Widget extends WP_Widget {
+	var $slug;
+	var $args;
+	var $instance;
+	
+	/*
+	 * Set $this->options in order to define options available for 
+	 * your widget:
+	 *
+	 * array( 'option-key' => $description, ... )
+	 *
+	 * $description is an array with all optional keys:
+	 *	'validator': callback  - A callable that is given a parameter to validate.
+	 *	  Returns boolean whether or not the value is valid.
+	 *  'sanitizer': callback - A callable that filters the incoming value.
+	 *  'pattern': string - A regular expression to test value against
+	 *  'default': any - A default value for the option key if validation
+	 *    fails or the option is not present in the update POST
+	 *
+	 * Don't set options here that are entirely controlled by your sub-class.
+	 */
+	var $options;
+
+  /* 
+	 * constructor( $slug, $title, $description, $widget_options, $control_options )
+	 *
+	 * $slug - Prepended by "ione-" for widget registration
+	 * $title - Prepended by "iOne "  for widget registration
+	 * $description - Widget description
+	 * $widget_options - Normal widget options
+	 * $control_options - Normal control options
+	 */
+	function My_Widget( $slug, $title, $description, $widget_options = array(), $control_options = array() ) 
+	{
+		$this->slug = $slug;
+
+		$widget_options = wp_parse_args( $widget_options, array( 'description' => $description ) );
+		$control_options = wp_parse_args( $control_options, array() );
+
+		$this->WP_Widget( 'ione-'.$slug, 'iOne ' . $title, $widget_options, $control_options );
+	}
+
+	function markup( $args, $instance ) 
+	{
+		extract( $args );
+		echo 'This widget has not yet been written.';
+	}
+
+	// Override this to insert rules about whether or not to show the widget
+	function display_widget() { return true; }
+
+	function widget( $args, $instance ) 
+	{
+		$this->args = $args;
+		$this->instance = $instance;
+
+		if( !$this->display_widget() ) return false;
+
+		extract( $args );
+
+		$css_class = $this->css_class();
+
+		echo $before_widget . '<div class="my-widget my-widget-' . $this->slug . ( $css_class ? ' ' . $css_class : '' ) . '">';
+		
+		$this->markup( $args, $instance );
+		
+		echo '</div>' . $after_widget;
+	}
+
+	function title( $title ) 
+	{
+		extract( $this->args );
+		echo $before_title.esc_html($title).$after_title;
+	}
+
+	function css_class() { return false; }
+
+	function form( $instance ) 
+	{
+		$this->instance = $instance;
+		if( method_exists( $this, 'option_form' ) )
+			return $this->option_form( $instance );
+
+		// Mimics WordPress' behaviour when widget has no form() method
+		echo '<p class="no-options-widget">There are no options for this widget.</p>'; 
+		return 'noform';	
+	}
+
+	function option( $option ) 
+	{
+		if( isset( $this->instance[$option] ) )
+			return $this->instance[$option];
+		else if( isset( $this->options[$option] ) && isset( $this->options[$option]['default'] ) )
+			return $this->options[$option]['default'];
+		else
+			return false;
+	}	
+
+	function absint_or_blank( $val ) {
+		$val = absint( $val );
+		return $val ? $val : '';
+	}
+
+	/**
+	 * Use $options to dictate how fields are validated / sanitized, and updated
+	 * call 'on_update' method if it exists in the subclass
+	 */
+	function update( $new_instance, $old_instance ) 
+	{
+		$instance = $old_instance;
+
+		//Reset all values to defaults, if set. Allows checkboxes to be unset and ensures that data removed in widget settings is properly unset.
+		foreach ( $this->options as $name => $attrs ) {
+			if ( isset( $attrs[ 'default' ] ) )
+				$instance[ $name ] = $attrs[ 'default' ];
+		}
+
+		foreach( $this->options as $option => $desc ) {
+			if( isset( $desc['type'] ) && $desc['type'] == 'bool' ) {
+				$instance[$option] = isset( $new_instance[$option] );
+				continue;
+			}
+
+			if( !isset( $new_instance[$option] ) )
+				continue;
+
+			if( isset( $desc['validator'] ) && is_callable( $desc['validator'] ) ) {
+				if( call_user_func( $desc['validator'], $new_instance[$option] ) )
+					$instance[$option] = $new_instance[$option];
+			}
+			else if( isset( $desc['sanitizer'] ) && is_callable( $desc['sanitizer'] ) ) {
+				$instance[$option] = call_user_func( $desc['sanitizer'], $new_instance[$option] );
+			}
+			else if( isset( $desc['pattern'] ) ) {
+				if( preg_match( $desc['pattern'], $new_instance[$option] ) )
+					$instance[$option] = $new_instance[$option];
+
+				else
+					unset( $instance[$option] );
+			}
+			else if( isset( $desc['default'] ) ) {
+				$instance[$option] = $desc['default'];
+			}
+		}
+
+		if( is_callable( $this, 'on_update' ) )
+			$this->on_update( $instance );
+
+		return $instance;
+	}
+}

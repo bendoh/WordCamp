@@ -1,0 +1,6 @@
+<?php
+
+$sweet_meta_key = my_singleton( 'My_Sweet_Post_Meta_Box' )->meta_key;
+
+if( get_post_meta( $post_id, $sweet_meta_key, true ) )
+	echo '<h1>This post is sweet!</h1>';

@@ -1,0 +1,3 @@
+<?php
+
+my_singleton( 'My_Event' )->render();

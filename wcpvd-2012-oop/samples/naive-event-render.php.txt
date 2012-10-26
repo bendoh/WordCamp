@@ -1,0 +1,18 @@
+<?php
+class My_Event {
+	var $post_type = 'event';
+	var $meta_key_time = 'event_time';
+
+	function __construct() {
+		register_post_type( $this->post_type );
+
+		add_action( 'render_event', array( $this, 'render' ) );
+	}
+
+	function render() { ?>
+		<h1>This event is at:
+		<?php echo esc_html( get_post_meta( get_the_ID(), $this->meta_key, true ) ); ?>
+		</h1>
+	<?php 
+	}
+}

@@ -1,0 +1,6 @@
+<?php
+
+$sweet_meta_key = apply_filters( 'sweet_post_meta_key', '' );
+
+if( $sweet_meta_key && get_post_meta( $post_id, $sweet_meta_key, true ) )
+	echo '<h1>This post is sweet!</h1>';

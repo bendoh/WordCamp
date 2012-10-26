@@ -400,18 +400,29 @@ small { font-size: 60%; }
 .big { font-size: 22px; }
 .footnote { position: absolute; bottom: 40px; right: 60px; }
 
-code { font-family: Courier; }
+code { font-family: Courier; color: black; }
 
 img.code-sample { margin-left: -49px; }
 
 .overlap { position: relative; }
-.overlap > * { position: absolute; top: 0; left: 0; }
+.overlap > * { position: absolute; top: 0; left: 0; background-color: #fff; }
+.overlap .revealed { position: relative; }
 
 .center { position: absolute; width: 100%; text-align: center; left: 0; }
 	ul.center li { text-align: left; padding: 20px; list-style: inside; }
 
-ul.smaller li { padding: 15px; font-size: 35px; }
+ul.fat { font-weight: bold; text-shadow: 2px 2px 1px #ccc; }
+.smaller { font-size: 26px; padding: 6px; }
+ul.bullets.smaller li { padding: 15px; font-size: 35px; }
+
 
 ul.split-4 li { width: 20%; float: left; padding: 2%; margin: 0; text-align: center; }
+ul.split-3 li { width: 30%; float: left; padding: 1%; margin: 0; text-align: center; }
 
 .leader { text-align: center; font-size: 64px; }
+
+dl.reveal { border: 0;}
+
+.pro { color: #0d0; }
+.con { color: #d00; }
+.note { color: #d80; }

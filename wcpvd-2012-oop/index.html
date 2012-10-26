@@ -66,9 +66,16 @@
 		<div class="step slide" data-x="1200">
 			<h1>About Oomph</h1>
 
-			<img src="oomph-large.png" style="display: block; margin: 30px auto;" />
+			<ul class="bullets">
+				<li>Web Development House</li>
 
-			<img src="box-office.jpg" style="display: block; float: left" />
+				<li>Specialize in WordPress and Drupal</li>
+
+				<li>WordPress.com VIP Technical Partner</li>
+			</ul>
+
+			<p><img src="images/office.jpg" /></p><br/>
+
 			<p>Located right here in sunny Providence, Rhode Island!</p>
 		</div>
 
@@ -115,27 +122,27 @@
 
 		<div class="step slide" data-x="4800">
 			<h1 class="center">Why OOP in WordPress?</h1>
-
 		</div>
 
 		<div class="step slide" data-x="4800" data-y="900" data-substep="reveal">
 			<h1>1. Namespacing</h1>
 
-			<div class="reveal overlap">
-				<img class="code-sample" src="images/simple-sweet_post-meta-box.png" alt="Code Sample" />
-				<img class="code-sample" src="images/oop-sweet_post-meta-box.png" alt="OOP Code Sample" />
-			</div>
+			<ul class="reveal center bullets">
+				<li>You should be namespacing all your theme-defined functions anyway</li>
+
+				<li>If functions are defined in a class, only the class needs to be namespaced</li>
+			</ul>
 		</div>
 
 		<div class="step slide" data-x="4800" data-y="1800" data-substep="reveal">
 			<h1>2. Code Re-Use</h1>
 
-			<div class="reveal overlap">
-				<img class="code-sample revealed" src="images/oop-sweet_post-meta-box.png" alt="OOP Code Sample: My_Sweet_Meta_Box" />
-				<img class="code-sample" src="images/oop-your_sweet_post-meta-box.png" alt="OOP Code Sample: Your_Sweet_Meta_Box" />
-			</div>
-		</div>
+			<ul class="reveal center bullets">
+				<li>Code wrapped up in a class can easily be migrated to another theme</li>
 
+				<li>Just rename the class (and any references) and you're good to go!</li>
+			</ul>
+		</div>
 
 		<div class="step slide" data-x="4800" data-y="2700" data-substep="reveal">
 			<h1>3. Consistency</h1>
@@ -166,7 +173,7 @@
 
 			<img src="images/kiss.jpg" alt="KISS!" style="display: block; margin: 10px auto;" />
 
-			<ul class="reveal bullets split-4" style="width: 80%; margin: 15px auto;">
+			<ul class="reveal bullets split-4 fat" style="width: 80%; margin: 15px auto;">
 				<li>Keep</li>
 
 				<li>It</li>
@@ -181,28 +188,497 @@
 		<div class="step slide" data-x="2700" data-y="4800" data-rotate="90" data-substep="reveal">
 			<h1 class="leader">DRY</h1>
 
-			<img src="images/kiss.jpg" alt="KISS!" style="display: block; margin: 10px auto;" />
+			<img src="images/dry.png" alt="DRY!" style="display: block; margin: 10px auto;" />
 
-			<ul class="reveal bullets split-4" style="margin-top: 200px; text-align: center; padding: 0 50px;  width: 80%">
-				<li>Keep</li>
+			<ul class="reveal bullets split-3 fat" style="width: 70%; margin: 15px auto;">
+				<li>Don't</li>
 
-				<li>It</li>
+				<li>Repeat</li>
 
-				<li>Simple</li>
-
-				<li>Stupid</li>
+				<li>Yourself</li>
 			</ul>
 
 		</div>
 
+		<div class="step slide" data-x="1800" data-y="4800" data-rotate="90" data-substep="reveal">
+			<h1 class="leader ">Do-Not-Depend</h1>
 
-		<div class="step slide" data-x="0" data-y="900" data-substep="reveal">
-			<h1>Credits</h1>
+			<ul class="reveal bullets center">
+				<li>Dependencies make migrating code more difficult.</li>
+
+				<li>Also makes for more fragile code.</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="900" data-y="4800" data-rotate="90">
+			<h1 class="leader">Newer Isn't Always Better</h1>
+
+			<pre class="brush: php">
+// These two features are available as of PHP 5.3, 
+// but WordPress can run on PHP 5.2.4
+
+// Cool new operator... Short-circuit ternary?
+$the_value = $_POST['value'] ?: "default value"; 
+
+// Anonymous functions. 
+add_filter( 'the_content', function( $content ) {
+	return $content . " filtered!";
+});
+</pre>
+		</div>
+
+		<div class="step slide" data-x="0" data-y="4800" data-rotate="90" data-substep="reveal">
+			<h1 class="leader center">I don't know it all!</h1>
+		</div>
+
+		<div class="step slide" data-x="0" data-y="6000" data-rotate="-90" data-substep="reveal">
+			<h1 class="leader">Code Organization</h1>
+
+			<dl class="reveal">
+				<dt><code>theme/functions.php</code></dt>
+				<dd>Top-level functions available for all theme files</dd>
+
+				<dt><code>theme/functions/</code></dt>
+				<dd>Additional function groups and code modules</dd>
+
+				<dt><code>theme/functions/template.php</code></dt> 
+				<dd>Template tags. Functions that emit markup.</dd>
+
+				<dt><code>theme/functions/class-*.php</code></dt>
+				<dd>
+					Class files. Lower-case, prefixed with class.<br/>
+					Example: <code>theme/functions/class-my-sweet-post.php</code>
+				</dd>
+			</dl>
+		</div>
+
+		
+		<div class="step slide" data-x="900" data-y="6000" data-rotate="-90" data-substep="reveal">
+			<h1 class="leader">Workflow</h1>
+
+			<h2>In your <code>wp-config.php</code>:</h2>
+
+			<dl class="reveal" style="margin-top: -30px">
+				<dt><code>define( 'WP_DEBUG', true );</code></dt>
+				<dd>Turn on WordPress debugging. This will turn on various PHP Warnings and Errors.</dd>
+
+				<dt><code>define( 'WP_DEBUG_DISPLAY', false );</code></dt>
+				<dd>Don't dump debug messages to the screen.</dd>
+
+				<dt><code>define( 'WP_DEBUG_LOG', true );</code></dt> 
+				<dd>Log to <code>wp-content/debug.log</code></dd>
+
+				<dt>Watch <code>wp-content/debug.log</code> like a HAWK! PHP Warnings are a bad thing and can indicate bugs in your code.</dt>
+
+				<dt>Plugins: <a href="http://wordpress.org/extend/plugins/debug-bar/">Debug Bar</a>, <a href="http://wordpress.org/extend/plugins/debug-bar-extender/">Debug Bar Extender</a></dt> 
+			</dl>
+		</div>
+
+		<div class="step slide" data-x="2600" data-y="6600">
+			<h1 class="leader center">Now for some code</h1>
+		</div>
+
+		<div class="step slide" data-x="900" data-y="7200" data-rotate="90" data-substep="reveal">
+			<h1>Namespacing</h1>
+
+			<div class="reveal overlap">
+				<img class="code-sample" src="images/simple-sweet_post-meta-box.png" alt="Code Sample" />
+				<img class="code-sample" src="images/oop-sweet_post-meta-box.png" alt="OOP Code Sample" />
+			</div>
+		</div>
+
+		<div class="step slide" data-x="0" data-y="7200" data-rotate="90" data-substep="reveal">
+			<h1>Code Re-Use</h1>
+
+			<div class="reveal overlap">
+				<img class="code-sample revealed" src="images/oop-sweet_post-meta-box.png" alt="OOP Code Sample: My_Sweet_Meta_Box" />
+				<img class="code-sample" src="images/oop-your_sweet_post-meta-box.png" alt="OOP Code Sample: Your_Sweet_Meta_Box" />
+			</div>
+		</div>
+
+		<div class="step slide" data-x="-900" data-y="7200" data-rotate="90" data-substep="reveal">
+			<h1>Instantiation</h1>
+
+			<h2>Singletons</h2>
+
+			<ul class="reveal center">
+				<li>A class which should only be instantiated ONCE.</li>
+
+				<li>Not intended to be subclassed.</li>
+
+				<li>Can be implemented a variety of ways.</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="-1800" data-y="7200" data-rotate="90" data-substep="reveal">
+			<h2>Singleton: Static Methods</h2>
+
+			<pre class="brush: php">
+class My_Singleton {
+	static function init() {
+		add_action( 'save_post', array( get_class(), 'action_save_post' ) );
+	}
+
+	static function action_save_post( $post_id ) {
+	  ...
+	}
+}
+My_Singleton::init();
+</pre>
+
+			<ul class="reveal">
+				<li class="con">Not <strong>truly</strong> a singleton, as it doesn't need to be instantiated. Provides similar behavior.</li>
+
+				<li class="con">No self-reference (<code>$this</code>);</li>
+
+				<li class="con">Not much different from just writing a bunch of functions.</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="-2700" data-y="7200" data-rotate="90" data-substep="reveal">
+			<h2>Auto-Enforced Singleton</h2>
+
+			<pre class="brush: php">
+class My_Singleton {
+	private function __construct() {
+		add_action( 'save_post', array( $this, 'action_save_post' ) );
+	}
+
+	private function __clone() { } // Disallow clone() of object
+
+	private static $instance = false;
+
+	public static function get_instance() {
+		if( !$self::instance )
+			$self::instance = new My_Singleton;
+
+		return $self::instance;
+	}
+
+	static function action_save_post( $post_id ) {
+	  ...
+	}
+}
+My_Singleton::get_instance();
+</pre>
+
+			<ul class="reveal smaller">
+				<li class="pro">Very robust.</li>
+
+				<li class="con">Requires a lot of typing. Must repeat this construct for every singleton class.</li>
+
+				<li class="con">Can not be inherited / extended.</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="-3600" data-y="7200" data-rotate="90" data-substep="reveal">
+			<h2>Singleton Base Class</h2>
+
+			<pre class="brush: php">
+class Singleton {
+	protected static $instances;
+
+	protected function __construct() { }
+
+	final private function __clone() { }
+
+	public static function get_instance() {
+		$class = get_called_class();
+
+		if (!isset(self::$instances[$class])) {
+			self::$instances[$class] = new $class;
+		}
+		return self::$instances[$class];
+	}
+}
+</pre>
+		</div>
+		
+		<div class="step slide" data-x="-3600" data-y="8400" data-rotate="90" data-substep="reveal">
+			<h2>Singleton Base Class in Action</h2>
+
+			<pre class="brush: php">
+class My_Singleton extends Singleton {
+	function My_Singleton() {
+		add_action( 'save_post', array( $this, 'action_save_post' ) );
+	}
+
+	function action_save_post( $post_id ) {
+	  ...
+	}
+}
+My_Singleton::get_instance();
+
+</pre>
+
+			<ul class="reveal">
+				<li class="pro">Robust. Guarantees singleton.</li>
+				<li class="pro">Re-useable base class simplifies sub-classes.</li>
+				<li class="con">Violates <strong>DND</strong>. Re-using requires bringing base class along.</li>
+				<li class="con">Depends on PHP 5.3 (<code>get_called_class()</code>)</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="-4500" data-y="7200" data-rotate="90" data-substep="reveal">
+			<h2>Singleton Factory</h2>
+
+			<pre class="brush: php">
+function my_singleton_factory( $class ) {
+	static $instances;
+
+	if( !isset( $instances[$class] ) )
+		$instances[$class] = new $class;
+		
+	return $instances[$class];
+}
+</pre>
+
+			<ul class="reveal">
+				<li class="pro">Dead-simple.</li>
+				<li class="pro">Simple theme-level function to access singleton.</li>
+				<li class="con">In no way enforces a class is instantiated once.</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="-5400" data-y="7200" data-rotate="90" data-substep="reveal">
+			<h2>Singleton Factory with Placeholder</h2>
+
+			<pre class="brush: php">
+
+/*
+ * Placeholder class that simulates a real object, but does nothing.
+ * Code depending on a missing class won't cause fatal errors, 
+ * Messages will get printed to error log when accessed
+ */
+class My_Placeholder {
+	private $placeholder_class = '';
+	private $reason = '';
+
+	function __construct( $class, $reason ) {
+		$this->placeholder_class = $class;
+		$this->reason = $reason;
+		error_log( "Attempted to create non-existent class singleton in class '$this->placeholder_class' (reason=$reason)" );
+	}
+	function __call( $method, $args ) {
+		error_log( "Attempted to call method '$method' on missing class '$this->placeholder_class'; args", $args );
+		return null;
+	}
+	function __get( $name ) {
+		error_log( "Attempted to access object property '$name' on missing class '$this->placeholder_class'" );
+		return null;
+	}
+	function __set( $name, $value ) {
+		error_log( "Attempted to set object property '$name' to '$value' on missing class '$this->placeholder_class'" );
+	}
+}
+</pre>
+		</div>
+
+		<div class="step slide" data-x="-6300" data-y="7200" data-rotate="90" data-substep="reveal">
+			<h2>Singleton Factory with Placeholder (Continued)</h2>
+
+			<pre class="brush: php">
+function my_singleton_factory( $class ) {
+	static $instances;
+
+	if( !class_exists( $class ) ) 
+		return new My_Placeholder( $class, "Class does not exist" );
+
+	if( !isset( $instances[$class] ) )
+		$instances[$class] = new $class;
+
+	return $instances[$class];
+}
+</pre>
+			
+			<ul class="reveal">
+				<li class="pro">Theme-level function to access singleton.</li>
+				<li class="pro">Robust: Provides a fallback in case a class doesn't exist.</li>
+				<li class="pro">If a class doesn't exist, notices will be posted to the error log.</li>
+				<li class="con">Much more complex.</li>
+				<li class="con">In no way enforces a class is only instantiated once.</li>
+				<li class="con">Encourages direct access to singletons</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="-6300" data-y="8400" data-rotate="-90" data-substep="reveal">
+			<h1 class="leader">Where does it go?</h1>
+			
+			<h2>Classes should ALWAYS be put in their own class file</h2>
+
+			<div class="reveal">
+				<p>
+					<strong>UNLESS</strong> the classes are very tightly related and co-dependant
+					<br/>
+					<br/>
+					<br/>
+				</p>
+				
+				<h2>Include class in <code>functions.php</code>, instantiate separately:</h2>
+
+				<code class="smaller">include( __DIR__ . '/functions/class-my-sweet-post.php' );</code>
+			</div>
+
+			<ul class="reveal smaller">
+				<li><code>new My_Sweet_Post;</code></li>
+
+				<li><code>My_Sweet_Post::get_instance();</code></li>
+
+				<li><code>my_singleton( 'My_Sweet_Post' );</code></li>
+
+				<li class="pro">Instantiating in <code>functions.php</code> gives you more control over whether you want the featured enabled.</li>
+			</ul>
+
+		</div>
+
+		<div class="step slide" data-x="-6300" data-y="9600" data-rotate="-180" data-substep="reveal">
+			<h1 class="leader">Object Heirarchy</h1>
+
+			<h2 class="center">Wide vs. Deep Object Graphs</h2>
+		</div>
+
+		<div class="step slide" data-x="-7500" data-y="9600" data-rotate="-180" data-substep="reveal">
+			<h1>Deep Object Graph</h1>
+
+			<img src="images/deep-classes.png" alt="Deep Class Heirarchy" />
+		</div>
+
+		<div class="step slide" data-x="-8700" data-y="9600" data-rotate="-180" data-substep="reveal">
+			<h1>Deep Object Graph: Pros and Cons</h1>
+
+			<ul class="bullets reveal center">
+				<li class="pro">Allows for creating common code very easily</li>
+
+				<li class="con">Creates a ton of dependencies</li>
+
+				<li class="con">Almost always overkill for WordPress themes</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="-9900" data-y="9600" data-rotate="-180">
+			<h1>Shallow Object Graph</h1>
+
+			<img src="images/shallow-classes.png" alt="Shallow Class Heirarchy" />
+		</div>
+
+		<div class="step slide" data-x="-11100" data-y="9600" data-rotate="-180" data-substep="reveal">
+			<h1>Shallow Object Graph: Pros and Cons</h1>
+
+			<ul class="bullets reveal center">
+				<li class="pro">Much simpler.</li>
+
+				<li class="pro">Fewer dependencies</li>
+
+				<li class="con">Harder to create and use common code.</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="-12300" data-y="10400" data-rotate="-90" data-substep="reveal">
+			<h1 class="leader center">Object Communication</h1>
+		</div>
+
+		<div class="step slide" data-x="-11100" data-y="11600" data-rotate="0" data-substep="reveal">
+			<h1>Updated Sweet Post Meta Box</h1>
+
+			<img class="code-sample" src="images/updated-sweet-post-meta-box.png" alt="Revised sweet post meta box object code" />
+		</div>
+
+
+		<div class="step slide" data-x="-9900" data-y="11600" data-rotate="0" data-substep="reveal">
+			<h1>Get Sweetness in Theme</h1>
+
+			<div class="reveal overlap">
+				<img class="code-sample revealed" src="images/sweet-post-naive.png" alt="Naive accessor" />
+				<img class="code-sample" src="images/sweet-post-filter.png" alt="Accessor via filter" />
+			</div>
+
+			<ul class="reveal">
+				<li class="pro">Remove dependency by using filter.</li>
+				<li class="pro">No problem if filter isn't defined.</li>
+				<li class="pro">Opportunity to provide a default value.</li>
+				<li class="pro">Opportunity for other code to override this meta key.</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="-8700" data-y="11600" data-rotate="0" data-substep="reveal">
+			<h1>Render Output &mdash; Naive</h1>
+
+			<div class="reveal">
+				<div class="revealed">
+					<h2><code>functions/class-my-event.php</code></h2>
+
+					<img class="code-sample revealed" src="images/naive-event-class.png" alt="Naive Event Class" />
+				</div>
+
+				<div>
+					<br/>
+					<h2><code>single-event.php</code></h2>
+
+					<img class="code-sample revealed" src="images/naive-event-render.png" alt="Naive Event Rendering" />
+				</div>
+			</div>
+		</div>
+
+		<div class="step slide" data-x="-7500" data-y="11600" data-rotate="0" data-substep="reveal">
+			<h1>Render Output with Actions!</h1>
+
+			<div class="reveal">
+				<div class="revealed">
+					<h2><code>functions/class-my-event.php</code></h2>
+
+					<img class="code-sample revealed" src="images/action-event-class.png" alt="Action Event Class" />
+				</div>
+
+				<div>
+					<br/>
+					<h2><code>single-event.php</code></h2>
+
+					<img class="code-sample revealed" src="images/action-event-render.png" alt="Action Event Rendering" />
+				</div>
+			</div>
+		</div>
+
+		<div class="step slide" data-x="-7500" data-y="12600" data-rotate="90" data-substep="reveal">
+			<h1>Actions + Filters Remove Dependencies</h1>
+
+			<ul class="reveal bullets center">
+				<li class="pro">Filters let you hook into code and generate / modify values</li>
+
+				<li class="pro">Actions let you perform tasks such as rendering or setup</li>
+
+				<li class="note"><strong>And the dependencies are gone!</strong></li>
+			</ul>
+		</div>
+		
+		<div class="step slide" data-x="-8600" data-y="12600" data-rotate="180" data-substep="reveal">
+			<h1>Super Class: Widget</h1>
+
+			<h2><a href="samples/class-my-widget.php.txt">My_Widget_Base Class</a></h2>
 
 			<ul class="bullets">
-				<li>Credit 1...</li>
+				<li class="pro">Provide reasonable defaults for a variety of settings.</li>
 
-				<li>Credit 2...</li>
+				<li class="pro">Specify options, validators, patterns and defaults using an <code>$options</code> structure</li>
+
+				<li class="pro">Allows subclasses to hide / show their display in logic</li>
+			</ul>
+		</div>
+
+		<div class="step slide" data-x="0" data-y="1800" data-substep="reveal">
+			<h1>Wrap-Up</h1>
+
+			<ul class="bullets reveal">
+				<li><h2>KISS</h2></li>
+
+				<li><h2>DRY</h2></li>
+
+				<li><h2>Singletons : So many ways!</h2></li>
+
+				<li><h2>Short and Stout Object Graphs</h2></li>
+
+				<li><h2>Communicate via Actions and Filters</h2></li>
+
+				<li><h2>Keep Dependencies to a Minimum</h2></li>
 			</ul>
 		</div>
 	</div>
@@ -240,4 +716,5 @@
 		impress().init();</script>
 	</body>
 </html>
+
 
