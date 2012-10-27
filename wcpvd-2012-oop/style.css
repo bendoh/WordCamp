@@ -1,0 +1,14 @@
+body {
+    font-family: 'PT Sans', sans-serif;
+    min-height: 740px;
+
+    background: rgb(93, 15, 15);
+    background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 500, from(rgb(176, 28, 28)), to(rgb(93, 15, 15)));
+    background: -webkit-radial-gradient(rgb(176, 28, 28), rgb(93, 15, 15));
+    background:    -moz-radial-gradient(rgb(176, 28, 28), rgb(93, 15, 15));
+    background:     -ms-radial-gradient(rgb(176, 28, 28), rgb(93, 15, 15));
+    background:      -o-radial-gradient(rgb(176, 28, 28), rgb(93, 15, 15));
+    background:         radial-gradient(rgb(176, 28, 28), rgb(93, 15, 15));
+}
+
+
