@@ -1,6 +1,6 @@
 <?php
 /*
- * iOne Widget Base Class 
+ * Widget Base Class 
  *
  * Simplifies widget development by providing a consistent
  * option processing interface and offering the ability 
@@ -36,24 +36,22 @@ class My_Widget extends WP_Widget {
   /* 
 	 * constructor( $slug, $title, $description, $widget_options, $control_options )
 	 *
-	 * $slug - Prepended by "ione-" for widget registration
-	 * $title - Prepended by "iOne "  for widget registration
+	 * $slug - Prepended by "my-" for widget registration
+	 * $title - Prepended by "My "  for widget registration
 	 * $description - Widget description
 	 * $widget_options - Normal widget options
 	 * $control_options - Normal control options
 	 */
-	function My_Widget( $slug, $title, $description, $widget_options = array(), $control_options = array() ) 
-	{
+	function My_Widget( $slug, $title, $description, $widget_options = array(), $control_options = array() ) 	{
 		$this->slug = $slug;
 
 		$widget_options = wp_parse_args( $widget_options, array( 'description' => $description ) );
 		$control_options = wp_parse_args( $control_options, array() );
 
-		$this->WP_Widget( 'ione-'.$slug, 'iOne ' . $title, $widget_options, $control_options );
+		$this->WP_Widget( 'my-'.$slug, 'My ' . $title, $widget_options, $control_options );
 	}
 
-	function markup( $args, $instance ) 
-	{
+	function markup( $args, $instance ) {
 		extract( $args );
 		echo 'This widget has not yet been written.';
 	}
@@ -61,8 +59,7 @@ class My_Widget extends WP_Widget {
 	// Override this to insert rules about whether or not to show the widget
 	function display_widget() { return true; }
 
-	function widget( $args, $instance ) 
-	{
+	function widget( $args, $instance ) {
 		$this->args = $args;
 		$this->instance = $instance;
 
@@ -79,16 +76,14 @@ class My_Widget extends WP_Widget {
 		echo '</div>' . $after_widget;
 	}
 
-	function title( $title ) 
-	{
+	function title( $title ) {
 		extract( $this->args );
 		echo $before_title.esc_html($title).$after_title;
 	}
 
 	function css_class() { return false; }
 
-	function form( $instance ) 
-	{
+	function form( $instance ) {
 		$this->instance = $instance;
 		if( method_exists( $this, 'option_form' ) )
 			return $this->option_form( $instance );
@@ -98,8 +93,7 @@ class My_Widget extends WP_Widget {
 		return 'noform';	
 	}
 
-	function option( $option ) 
-	{
+	function option( $option ) {
 		if( isset( $this->instance[$option] ) )
 			return $this->instance[$option];
 		else if( isset( $this->options[$option] ) && isset( $this->options[$option]['default'] ) )
@@ -117,8 +111,7 @@ class My_Widget extends WP_Widget {
 	 * Use $options to dictate how fields are validated / sanitized, and updated
 	 * call 'on_update' method if it exists in the subclass
 	 */
-	function update( $new_instance, $old_instance ) 
-	{
+	function update( $new_instance, $old_instance ) {
 		$instance = $old_instance;
 
 		//Reset all values to defaults, if set. Allows checkboxes to be unset and ensures that data removed in widget settings is properly unset.

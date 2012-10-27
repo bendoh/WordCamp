@@ -351,7 +351,7 @@ ul li { color: #4d4d4d; margin: .8em }
 ul ul { font-size: 80%; line-height: 1.25em; }
 
 ul.bullets { font-size: 40px; line-height: 1.125em; }
-
+ul.bigger { list-style: none; font-size: 40px; padding: 15px; }
 ul.float-li li { float: left; width: 44%; }
 
 table { width: 100%; }
